@@ -82,14 +82,18 @@ section{padding:72px 0}
 @media(min-width:768px){.hero{padding:128px 0 136px}}
 .hero::after{content:"";position:absolute;right:-180px;top:-180px;width:560px;height:560px;border-radius:50%;border:1px solid rgba(255,255,255,.06);box-shadow:0 0 0 80px rgba(255,255,255,.015),0 0 0 160px rgba(255,255,255,.01);pointer-events:none}
 .hero .container{position:relative;z-index:1}
-.hero h1{font-size:56px;margin-bottom:16px}
-@media(max-width:640px){.hero h1{font-size:42px}}
+.hero h1.hero-h1{font-size:52px;font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.1;color:#FFFFFF;max-width:900px;margin-bottom:28px}
+@media(max-width:640px){.hero h1.hero-h1{font-size:34px}}
 .hero-title{font-size:21px;color:var(--white);font-weight:500;margin-bottom:28px}
 .hero-title span{color:var(--on-navy);font-weight:400}
 .hero-tagline{font-size:30px;line-height:1.3;font-weight:700;color:var(--white);max-width:760px;margin-bottom:28px;letter-spacing:-.02em}
 .hero-tagline em{font-style:normal;color:#93B4F5}
 @media(max-width:640px){.hero-tagline{font-size:24px}}
-.contact-row{display:flex;flex-wrap:wrap;gap:8px 24px;margin-bottom:36px;font-size:17px}
+.hero-person{font-size:30px;font-weight:700;color:var(--white);letter-spacing:-.01em;margin-bottom:10px;display:flex;align-items:center;flex-wrap:wrap}
+.hero-person .sep{display:inline-block;width:2px;height:26px;background:rgba(255,255,255,.35);margin:0 16px}
+.hero-person .role{font-weight:500;color:#93B4F5}
+@media(max-width:640px){.hero-person{font-size:24px;flex-wrap:nowrap;white-space:nowrap}.hero-person .sep{height:22px;margin:0 12px}}
+.contact-row{display:flex;flex-wrap:wrap;gap:8px 24px;margin-bottom:44px;padding-bottom:36px;border-bottom:1px solid rgba(255,255,255,.12);font-size:17px}
 .contact-row a,.contact-row span{color:var(--on-navy);text-decoration:none;display:inline-flex;align-items:center;gap:8px}
 .contact-row a:hover{color:var(--white)}
 .contact-row svg{width:18px;height:18px;color:#93B4F5}
@@ -97,7 +101,7 @@ section{padding:72px 0}
 .badges{display:flex;flex-wrap:wrap;gap:10px}
 .badge{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--white);padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14)}
 .badge svg{width:16px;height:16px;color:#93B4F5}
-.hero-note{margin-top:40px;font-size:15px;color:rgba(255,255,255,.6);max-width:680px}
+.hero-note{margin-top:40px;font-size:17px;color:rgba(255,255,255,.6);max-width:680px}
 
 /* Generic card */
 .card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
@@ -522,7 +526,7 @@ footer .container{display:flex;justify-content:center;text-align:center}
 
 <header class="nav">
   <div class="container">
-    <a class="brand" href="#top">Seun Bakare <span>| GRC Analyst</span></a>
+    <a class="brand" href="#top">Governance, Risk &amp; Compliance</a>
     <button class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links"><svg width="22" height="22"><use href="#i-menu"/></svg></button>
     <ul class="nav-links" id="nav-links">
       <li><a href="#about">About</a></li>
@@ -541,26 +545,25 @@ footer .container{display:flex;justify-content:center;text-align:center}
 <!-- ============ 1. HERO ============ -->
 <section class="hero bg-navy" aria-labelledby="hero-name">
   <div class="container">
-    <span class="eyebrow">Governance, Risk &amp; Compliance Portfolio</span>
-    <h1 id="hero-name">Seun Bakare</h1>
-    <p class="hero-title">GRC Analyst <span>| Governance, Risk &amp; Compliance | Calgary, AB</span></p>
-    <p class="hero-tagline">Security risk, explained in <em>business language</em>.</p>
+    <p class="hero-person">Seun Bakare<span class="sep" aria-hidden="true"></span><span class="role">GRC Analyst</span></p>
     <div class="contact-row">
       <a href="mailto:bseun3785@gmail.com"><svg><use href="#i-mail"/></svg>bseun3785@gmail.com</a>
       <a href="tel:+18255617046"><svg><use href="#i-phone"/></svg>825-561-7046</a>
       <span><svg><use href="#i-pin"/></svg>Calgary, AB</span>
+      <a href="https://www.linkedin.com/in/oluwaseun-bakare-62097796/" target="_blank" rel="noopener"><svg><use href="#i-linkedin"/></svg>LinkedIn</a>
     </div>
+    <h1 id="hero-name" class="hero-h1">Governance, Risk &amp; Compliance Portfolio</h1>
+    <p class="hero-tagline">Security risk, explained in <em>business language</em>.</p>
     <div class="btn-row">
       <a class="btn btn-primary" href="#projects">View Projects <svg><use href="#i-arrow-down"/></svg></a>
       <a class="btn btn-ghost" href="[DRIVE_LINK_PORTFOLIO_PDF]" target="_blank" rel="noopener"><svg><use href="#i-download"/></svg>Download Full Portfolio PDF</a>
-      <a class="btn btn-ghost" href="https://www.linkedin.com/in/oluwaseun-bakare-62097796/" target="_blank" rel="noopener"><svg><use href="#i-linkedin"/></svg>LinkedIn</a>
     </div>
     <div class="badges" aria-label="Credentials">
       <span class="badge"><svg><use href="#i-check"/></svg>CompTIA Security+</span>
       <span class="badge"><svg><use href="#i-check"/></svg>NIST CSF 2.0</span>
       <span class="badge"><svg><use href="#i-check"/></svg>NIST AI RMF 1.0</span>
     </div>
-    <p class="hero-note">Five projects for one fictional firm: Sky Vault Calgary. Sky Vault Calgary is a fictional 50-person accounting firm created for these portfolio projects. All people, dates and findings are illustrative. October 2026.</p>
+    <p class="hero-note">Five projects built for Sky Vault Calgary, a fictional 50-person accounting firm. All people, dates and findings are illustrative.</p>
   </div>
 </section>
 
@@ -570,20 +573,14 @@ footer .container{display:flex;justify-content:center;text-align:center}
     <div class="about-grid">
       <div class="about-copy">
         <span class="eyebrow">About this portfolio</span>
-        <h2 id="about-h" style="margin-bottom:24px">Security risk, explained in business language</h2>
+        <h2 id="about-h" style="margin-bottom:24px">From security requirements to business decisions</h2>
         <p class="lead">These five projects show how a GRC Analyst turns security and compliance requirements into plain language that leaders can act on.</p>
-        <p>They were built for <strong>Sky Vault Calgary</strong>, a fictional 50-person accounting firm, so that every document connects to the same company, the same people and the same risks.</p>
+        <p>All five are written for one client, so every document connects to the same people, systems and risks.</p>
       </div>
       <aside class="card company-card" aria-labelledby="svc-h">
         <span class="eyebrow">The client</span>
         <h3 id="svc-h">About Sky Vault Calgary (fictional)</h3>
         <p>A 50-person accounting firm in Calgary, Alberta. It holds client financial records, payroll data and tax files, so it must protect confidentiality, keep systems available at tax deadlines and show clients it handles their data responsibly.</p>
-        <ul class="company-facts">
-          <li><svg><use href="#i-users"/></svg><span><strong>50 people</strong>, Calgary, Alberta</span></li>
-          <li><svg><use href="#i-lockfile"/></svg><span>Holds <strong>client financial records, payroll data and tax files</strong></span></li>
-          <li><svg><use href="#i-shield"/></svg><span>Must protect <strong>confidentiality</strong>, keep systems <strong>available at tax deadlines</strong>, and show <strong>responsible data handling</strong></span></li>
-        </ul>
-        <p class="fictional">All people, dates and findings are illustrative.</p>
       </aside>
     </div>
 
@@ -1350,11 +1347,7 @@ footer .container{display:flex;justify-content:center;text-align:center}
       <div>
         <span class="open-badge"><i aria-hidden="true"></i>Open to GRC Analyst roles in Calgary / Remote</span>
         <h2 id="contact-h">Let's talk about your risk program</h2>
-        <p class="lead">I turn security and compliance requirements into plain language leaders can act on. If your team needs a GRC Analyst, I'd be glad to talk.</p>
-        <div class="btn-row" style="margin-bottom:0">
-          <a class="btn btn-primary" href="mailto:bseun3785@gmail.com"><svg><use href="#i-mail"/></svg>Email me</a>
-          <a class="btn btn-ghost" href="[DRIVE_LINK_PORTFOLIO_PDF]" target="_blank" rel="noopener"><svg><use href="#i-download"/></svg>Download Full Portfolio PDF</a>
-        </div>
+        <p class="lead">If your team needs someone to assess risk, write policy and brief leadership in plain terms, I'd be glad to talk.</p>
       </div>
       <div class="contact-list">
         <a class="contact-item" href="mailto:bseun3785@gmail.com"><span class="ci"><svg><use href="#i-mail"/></svg></span><div><small>Email</small><span>bseun3785@gmail.com</span></div></a>
