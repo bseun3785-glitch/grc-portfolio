@@ -1,0 +1,950 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sandymichodrian Risk Assessment | Seun Bakare</title>
+<meta name="description" content="Seun Bakare, GRC Analyst. A ten-step information security and privacy risk assessment for Sandymichodrian Software Inc., a fictional Canadian SaaS company, mapped to NIST CSF 2.0, CIS Controls v8, PIPEDA and Québec Law 25.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Same visual system as the main GRC portfolio: navy and blue on white, Inter, large readable type. */
+:root{
+  --navy:#0B1220;
+  --white:#FFFFFF;
+  --soft:#F8FAFC;
+  --blue:#2563EB;
+  --blue-light:#93B4F5;
+  --head:#0F172A;
+  --body:#475569;
+  --line:rgba(15,23,42,.10);
+  --line-strong:rgba(15,23,42,.18);
+  --blue-tint:rgba(37,99,235,.08);
+  --blue-tint-2:rgba(37,99,235,.16);
+  --on-navy:rgba(255,255,255,.80);
+  --met:#0F766E;
+  --met-tint:rgba(15,118,110,.10);
+  --radius:12px;
+  --shadow:0 1px 2px rgba(15,23,42,.05),0 4px 16px rgba(15,23,42,.06);
+  --shadow-hover:0 2px 4px rgba(15,23,42,.06),0 10px 28px rgba(15,23,42,.10);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--white);color:var(--body);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--navy)}
+h1,h2,h3,h4{color:var(--head);margin:0;line-height:1.2;letter-spacing:-.02em;text-wrap:balance}
+h2{font-size:38px;font-weight:700}
+h3{font-size:25px;font-weight:700}
+h4{font-size:20px;font-weight:600;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--blue)}
+strong{color:var(--head);font-weight:600}
+.container{width:100%;max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media(min-width:768px){.container{padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}}
+section{padding-block:72px}
+@media(min-width:768px){section{padding-block:104px}}
+.bg-white{background:var(--white)}
+.bg-soft{background:var(--soft)}
+.bg-navy{background:var(--navy);color:var(--on-navy)}
+.bg-navy h1,.bg-navy h2,.bg-navy h3{color:var(--white)}
+.eyebrow{display:inline-block;font-size:16px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.section-head{max-width:780px;margin-bottom:48px}
+.section-head p{margin-top:16px;font-size:20px}
+@media(max-width:640px){h2{font-size:31px}h3{font-size:23px}}
+
+/* Nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(11,18,32,.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08)}
+.nav .container{display:flex;align-items:center;justify-content:space-between;min-height:64px;gap:16px;position:relative}
+.brand{color:var(--white);text-decoration:none;font-weight:700;font-size:18px;letter-spacing:-.01em;white-space:nowrap}
+.nav-links{display:flex;gap:2px;list-style:none;margin:0;padding:0}
+.nav-links a{display:block;color:var(--on-navy);text-decoration:none;font-size:16px;font-weight:500;padding:10px 11px;border-radius:8px;white-space:nowrap}
+.nav-links a:hover,.nav-links a:focus-visible{color:var(--white);background:rgba(255,255,255,.08)}
+.nav-links a.back{color:var(--blue-light)}
+.menu-btn{display:none;background:none;border:1px solid rgba(255,255,255,.2);color:var(--white);border-radius:8px;width:44px;height:44px;cursor:pointer;align-items:center;justify-content:center}
+.menu-btn svg{width:22px;height:22px}
+@media(max-width:1080px){
+  .menu-btn{display:inline-flex}
+  .nav-links{display:none;position:absolute;left:0;right:0;top:64px;background:var(--navy);flex-direction:column;padding:8px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid rgba(255,255,255,.08)}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:12px;font-size:18px}
+}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:12px 22px;border-radius:10px;font-family:inherit;font-size:17px;font-weight:600;text-decoration:none;cursor:pointer;border:1px solid transparent;transition:background .15s,border-color .15s,color .15s;line-height:1.2}
+.btn svg{width:18px;height:18px;flex:none}
+.btn-primary{background:var(--blue);color:var(--white)}
+.btn-primary:hover{background:#1D4FD0}
+.btn-ghost{background:transparent;color:var(--white);border-color:rgba(255,255,255,.3)}
+.btn-ghost:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5)}
+.btn-outline{background:var(--white);color:var(--head);border-color:var(--line-strong)}
+.btn-outline:hover{border-color:var(--blue);color:var(--blue)}
+.btn:focus-visible,a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid var(--blue-light);outline-offset:2px}
+
+/* Hero */
+.hero{padding-block:88px 96px;position:relative;overflow:hidden}
+@media(min-width:768px){.hero{padding-block:120px 128px}}
+.hero::after{content:"";position:absolute;right:-180px;top:-180px;width:560px;height:560px;border-radius:50%;border:1px solid rgba(255,255,255,.06);box-shadow:0 0 0 80px rgba(255,255,255,.015),0 0 0 160px rgba(255,255,255,.01);pointer-events:none}
+.hero .container{position:relative;z-index:1}
+.hero-person{font-size:30px;font-weight:700;color:var(--white);letter-spacing:-.01em;margin-bottom:10px;display:flex;align-items:center;flex-wrap:wrap}
+.hero-person .sep{display:inline-block;width:2px;height:26px;background:rgba(255,255,255,.35);margin:0 16px}
+.hero-person .role{font-weight:500;color:var(--blue-light)}
+@media(max-width:640px){.hero-person{font-size:25px}.hero-person .sep{height:22px;margin:0 12px}}
+.contact-row{display:flex;flex-wrap:wrap;gap:8px 24px;margin-bottom:44px;padding-bottom:36px;border-bottom:1px solid rgba(255,255,255,.12);font-size:18px}
+.contact-row a,.contact-row span{color:var(--on-navy);text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.contact-row a:hover{color:var(--white)}
+.contact-row svg{width:18px;height:18px;color:var(--blue-light)}
+.hero-kicker{display:inline-block;font-size:16px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-light);margin-bottom:14px}
+.hero h1{font-size:52px;font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.1;color:var(--white);max-width:950px;margin-bottom:28px}
+@media(max-width:640px){.hero h1{font-size:33px}}
+.hero-tagline{font-size:30px;line-height:1.3;font-weight:700;color:var(--white);max-width:780px;margin-bottom:32px;letter-spacing:-.02em}
+.hero-tagline em{font-style:normal;color:var(--blue-light)}
+@media(max-width:640px){.hero-tagline{font-size:24px}}
+.btn-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:44px}
+.badges{display:flex;flex-wrap:wrap;gap:10px}
+.badge{display:inline-flex;align-items:center;gap:8px;font-size:16px;font-weight:600;color:var(--white);padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14)}
+.badge svg{width:16px;height:16px;color:var(--blue-light)}
+.hero-note{margin-top:40px;font-size:18px;color:rgba(255,255,255,.78);max-width:760px;padding:18px 20px;border-radius:var(--radius);border:1px solid rgba(147,180,245,.35);background:rgba(37,99,235,.12)}
+.hero-note strong{color:var(--white)}
+
+/* Cards and grids */
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.grid{display:grid;gap:20px}
+@media(min-width:640px){.grid-2,.grid-4{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.grid-4{grid-template-columns:repeat(4,1fr)}}
+
+/* About */
+.about-grid{display:grid;gap:40px}
+.about-grid > *{min-width:0}
+@media(min-width:960px){.about-grid{grid-template-columns:1.1fr 1fr;gap:64px;align-items:start}}
+.about-copy p+p{margin-top:20px}
+.about-copy .lead{font-size:21px;color:var(--head);line-height:1.6}
+.company-card{padding:32px;background:var(--soft)}
+.company-card h3{margin-bottom:12px}
+.company-facts{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:12px}
+.company-facts li{display:flex;gap:12px;align-items:flex-start}
+.company-facts svg{width:20px;height:20px;color:var(--blue);flex:none;margin-top:5px}
+.fictional{margin-top:20px;font-size:17px;color:var(--head);border-top:1px solid var(--line);padding-top:16px}
+
+.steps-wrap{margin-top:64px}
+.steps-wrap > h3{margin-bottom:8px}
+.steps-wrap > p{margin-bottom:28px}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:640px){.steps{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1100px){.steps{grid-template-columns:repeat(5,1fr)}}
+.step{padding:20px;display:flex;flex-direction:column;gap:12px}
+.step-n{display:inline-flex;width:40px;height:40px;border-radius:10px;background:var(--blue-tint);color:var(--blue);align-items:center;justify-content:center;font-weight:800;font-size:18px}
+.step h4{font-size:19px;margin-bottom:4px}
+.step p{font-size:16px;line-height:1.55}
+
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--white);box-shadow:var(--shadow);-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:17px;line-height:1.55}
+th{background:var(--navy);color:var(--white);text-align:left;font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:14px 18px;white-space:nowrap}
+td{padding:16px 18px;border-top:1px solid var(--line);vertical-align:top;color:var(--body)}
+tbody tr:nth-child(even) td{background:var(--soft)}
+.overview-table{margin-top:56px}
+.overview-table h3{margin-bottom:20px}
+.overview-table table{min-width:760px}
+
+/* Summary */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:768px){.stats{grid-template-columns:repeat(5,1fr)}}
+.stat{padding:20px;border-radius:var(--radius);background:var(--soft);border:1px solid var(--line)}
+.stat .n{font-size:44px;font-weight:800;line-height:1;color:var(--head);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat .n small{font-size:20px;font-weight:600;color:var(--body)}
+.stat .l{font-size:17px;margin-top:8px;font-weight:500}
+.stat.is-critical{background:var(--navy);border-color:var(--navy)}
+.stat.is-critical .n{color:var(--white)}
+.stat.is-critical .l{color:var(--on-navy)}
+.stat.is-high .n{color:var(--blue)}
+.stat.is-total{grid-column:span 2}
+@media(min-width:768px){.stat.is-total{grid-column:auto}}
+.bg-white .stat,.summary .stat{background:var(--white)}
+.summary-list{list-style:none;margin:32px 0 0;padding:0;display:grid;gap:12px}
+.summary-list li{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding:20px 22px;border-radius:var(--radius);background:var(--white);border:1px solid var(--line)}
+.summary-list .k{font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);min-width:150px;padding-top:2px}
+.summary-list p{color:var(--head)}
+@media(max-width:640px){.summary-list li{grid-template-columns:1fr;gap:4px}}
+
+/* Skills */
+.skill{padding:26px;transition:box-shadow .2s,transform .2s}
+.skill:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px)}
+.skill-icon{width:48px;height:48px;border-radius:12px;background:var(--blue-tint);color:var(--blue);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.skill-icon svg{width:24px;height:24px}
+.skill h3{font-size:21px;margin-bottom:10px}
+.skill p{font-size:17px}
+.skill .where{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:16px}
+.skill .where b{color:var(--blue);font-weight:600}
+
+/* Projects (assessment parts) */
+.project-nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.project-nav a{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:8px 16px;border-radius:999px;border:1px solid var(--line-strong);text-decoration:none;color:var(--head);font-size:16px;font-weight:600;background:var(--white)}
+.project-nav a:hover{border-color:var(--blue);color:var(--blue)}
+.project-nav a span{color:var(--blue)}
+.project{overflow:hidden;margin-bottom:40px;scroll-margin-top:88px}
+.project-head{background:var(--navy);padding:32px;color:var(--on-navy)}
+@media(min-width:768px){.project-head{padding:40px 48px}}
+.project-head .eyebrow{color:var(--blue-light);margin-bottom:8px}
+.project-head h3{color:var(--white);font-size:32px;margin-bottom:8px}
+@media(max-width:640px){.project-head h3{font-size:26px}}
+.project-head .sub{font-size:19px;color:var(--white);opacity:.9}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.tag{font-size:15px;font-weight:600;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.08);color:var(--white);border:1px solid rgba(255,255,255,.14)}
+.project-body{padding:32px 20px}
+@media(min-width:768px){.project-body{padding:40px 48px}}
+.impact{display:flex;gap:16px;padding:24px;border-radius:var(--radius);background:var(--blue-tint);border:1px solid var(--blue-tint-2);margin-bottom:32px}
+.impact svg{width:24px;height:24px;color:var(--blue);flex:none;margin-top:4px}
+.impact .label{display:block;font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:4px}
+.impact p{color:var(--head);font-size:19px;font-weight:500;line-height:1.6}
+.intro{font-size:19px;margin-bottom:32px;max-width:900px}
+.block{margin-top:40px}
+.block > h4{margin-bottom:16px;font-size:22px}
+.block > p.note{margin-bottom:16px;max-width:900px}
+.project-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px;padding-top:32px;border-top:1px solid var(--line)}
+.details{margin-top:8px}
+.chev{transition:transform .2s}
+[aria-expanded="true"] .chev{transform:rotate(180deg)}
+
+/* Charts */
+.two-col{display:grid;gap:24px}
+.two-col > *{min-width:0}
+@media(min-width:960px){.two-col{grid-template-columns:1.1fr 1fr;gap:32px;align-items:stretch}}
+.two-col.even{grid-template-columns:1fr}
+@media(min-width:960px){.two-col.even{grid-template-columns:1fr 1fr}}
+.chart{padding:24px;border-radius:var(--radius);border:1px solid var(--line);background:var(--white);margin:0}
+.chart h4{margin-bottom:4px}
+.chart .cap{font-size:16px;margin-bottom:20px}
+.bar-row{display:grid;grid-template-columns:100px 1fr 40px;gap:12px;align-items:center;margin-bottom:14px}
+.bar-row .name{font-size:17px;font-weight:600;color:var(--head)}
+.bar-track{height:28px;background:var(--soft);border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.bar{height:100%;border-radius:5px 0 0 5px}
+.bar-critical{background:var(--navy)}
+.bar-high{background:var(--blue)}
+.bar-medium{background:rgba(37,99,235,.45)}
+.bar-low{background:rgba(37,99,235,.2)}
+.bar-row .val{font-weight:700;color:var(--head);font-size:19px;text-align:right;font-variant-numeric:tabular-nums}
+.mat-row{display:grid;grid-template-columns:110px 1fr 76px;gap:12px;align-items:center;margin-bottom:16px}
+.mat-row .name{font-size:17px;font-weight:600;color:var(--head);line-height:1.25}
+.mat-row .name small{display:block;font-size:15px;font-weight:500;color:var(--body)}
+.mat-track{position:relative;height:28px;background:var(--soft);border-radius:6px;border:1px solid var(--line);overflow:hidden}
+.mat-target{position:absolute;inset:0 auto 0 0;background:var(--blue-tint-2);border-right:3px solid var(--blue)}
+.mat-now{position:absolute;inset:0 auto 0 0;background:var(--navy)}
+.mat-row .val{font-weight:700;color:var(--head);font-size:19px;text-align:right;font-variant-numeric:tabular-nums}
+.mat-row .val small{font-size:15px;font-weight:500;color:var(--body)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:8px;font-size:16px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:16px;height:16px;border-radius:4px;display:inline-block}
+
+.pill{display:inline-flex;align-items:center;font-size:15px;font-weight:700;padding:4px 12px;border-radius:999px;white-space:nowrap;letter-spacing:.01em}
+.pill-critical{background:var(--navy);color:var(--white)}
+.pill-high{background:var(--blue);color:var(--white)}
+.pill-medium{background:var(--blue-tint-2);color:#1E40AF}
+.pill-low{background:var(--soft);color:var(--body);border:1px solid var(--line-strong)}
+.pill-met{background:var(--met-tint);color:var(--met);border:1px solid rgba(15,118,110,.25)}
+
+.levels{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:640px){.levels{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.levels{grid-template-columns:repeat(4,1fr)}}
+.level-card{padding:18px;border-radius:var(--radius);border:1px solid var(--line);background:var(--white)}
+.level-card .pill{margin-bottom:10px}
+.level-card p{font-size:17px}
+.callout{margin-top:24px;padding:24px;border-radius:var(--radius);background:var(--soft);border:1px solid var(--line)}
+.callout p{color:var(--head)}
+
+.critical-box{margin-top:32px;border-radius:var(--radius);overflow:hidden;border:2px solid var(--navy)}
+.critical-box .cb-head{background:var(--navy);color:var(--white);padding:18px 24px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px}
+.critical-box .cb-head strong{color:var(--white);font-size:20px}
+.critical-box .cb-id{font-weight:800;color:var(--blue-light);font-size:16px;letter-spacing:.06em}
+.critical-box .cb-body{padding:24px;display:grid;gap:20px}
+@media(min-width:768px){.critical-box .cb-body{grid-template-columns:repeat(4,1fr)}}
+.cb-body .k{font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:4px}
+.cb-body .v{color:var(--head);font-size:18px}
+.cb-body .v small{display:block;font-size:16px;color:var(--body)}
+.cb-body .wide{grid-column:1/-1}
+.score-big{font-size:38px;font-weight:800;color:var(--head);line-height:1}
+.score-big small{font-size:17px;font-weight:500;color:var(--body)}
+
+/* Filters and tables */
+.filters{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px}
+.filter-group{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:46px;padding:8px 16px;border-radius:999px;border:1px solid var(--line-strong);background:var(--white);color:var(--head);font-family:inherit;font-size:16px;font-weight:600;cursor:pointer}
+.chip:hover{border-color:var(--blue);color:var(--blue)}
+.chip[aria-pressed="true"]{background:var(--head);border-color:var(--head);color:var(--white)}
+.chip .c{opacity:.75;font-weight:500;margin-left:6px}
+.select-wrap{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600;color:var(--head)}
+.select-wrap select{min-height:46px;padding:8px 36px 8px 14px;border-radius:10px;border:1px solid var(--line-strong);font-family:inherit;font-size:16px;color:var(--head);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;appearance:none;cursor:pointer}
+.result-count{font-size:16px;margin-left:auto}
+.data table{min-width:900px}
+.data td.id{font-weight:700;color:var(--head);white-space:nowrap}
+.data .risk-title{color:var(--head);font-weight:600;display:block;margin-bottom:6px}
+.data .mit{display:block;font-size:16px}
+.data .meta{display:block;font-size:15px;margin-top:6px;color:var(--body)}
+.data .meta b{color:var(--head);font-weight:600}
+.data td.num{text-align:center;font-variant-numeric:tabular-nums;white-space:nowrap}
+.data td.score,.data .score{font-weight:800;color:var(--head);font-size:19px;text-align:center}
+.data .csf-fn{font-weight:600;color:var(--head);display:block}
+.data .csf-cat{font-size:15px}
+.data tr.is-crit td{background:rgba(11,18,32,.04)}
+.data tr.is-crit td:first-child{box-shadow:inset 4px 0 0 var(--navy)}
+.score-inline{font-weight:800;color:var(--head);font-size:18px;margin-right:6px;font-variant-numeric:tabular-nums}
+.empty{padding:24px;text-align:center}
+
+/* Evidence findings */
+.findings{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:640px){.findings{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.findings{grid-template-columns:repeat(4,1fr)}}
+.finding{padding:22px;border-radius:var(--radius);border:1px solid var(--line);background:var(--white)}
+.finding .big{font-size:40px;font-weight:800;color:var(--head);letter-spacing:-.03em;line-height:1.05}
+.finding .big span{color:var(--blue)}
+.finding .what{color:var(--head);font-weight:600;margin-top:8px}
+.finding p{font-size:16px;margin-top:4px}
+.ev-stats{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:768px){.ev-stats{grid-template-columns:repeat(4,1fr)}}
+
+/* Heat maps */
+.heatmap{margin:0;padding:24px;border-radius:var(--radius);border:1px solid var(--line);background:var(--white);min-width:0}
+.heatmap h4{margin-bottom:2px}
+.heatmap .cap{font-size:16px;margin-bottom:16px}
+.hm-grid{display:grid;grid-template-columns:28px repeat(5,minmax(0,1fr));gap:4px}
+.hm-cell{min-height:64px;border-radius:6px;padding:4px;display:flex;flex-wrap:wrap;gap:3px;align-content:center;justify-content:center}
+.hm-cell span{font-size:14px;font-weight:700;padding:2px 5px;border-radius:4px;background:rgba(255,255,255,.92);color:var(--head);line-height:1.3}
+.hm-critical{background:var(--navy)}
+.hm-high{background:var(--blue)}
+.hm-medium{background:rgba(37,99,235,.32)}
+.hm-low{background:rgba(37,99,235,.08);border:1px solid var(--line)}
+.hm-low span,.hm-medium span{background:var(--white);border:1px solid var(--line-strong)}
+.hm-axis{display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--body)}
+.hm-legend{font-size:15px;margin-top:10px;text-align:center}
+@media(max-width:520px){.hm-cell{min-height:52px}.hm-cell span{font-size:12px;padding:1px 3px}}
+
+/* Timeline */
+.timeline{list-style:none;margin:0;padding:0;position:relative}
+.timeline li{display:grid;grid-template-columns:28px 1fr;gap:16px;padding-bottom:20px;position:relative}
+.timeline li > div{min-width:0}
+.timeline li::before{content:"";position:absolute;left:13px;top:28px;bottom:0;width:2px;background:var(--blue-tint-2)}
+.timeline li:last-child::before{display:none}
+.timeline .dot{width:28px;height:28px;border-radius:50%;background:var(--white);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;margin-top:2px}
+.timeline .dot::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--blue)}
+.timeline .tl-card{padding:18px 20px;border-radius:var(--radius);border:1px solid var(--line);background:var(--white)}
+.timeline .tl-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;margin-bottom:6px}
+.timeline .when{font-weight:700;color:var(--head);font-size:19px}
+.timeline .owner{font-size:15px;font-weight:600;color:var(--blue);background:var(--blue-tint);padding:3px 10px;border-radius:999px;align-self:center}
+.timeline p{font-size:17px}
+.timeline .tl-cost{margin-top:6px;font-size:16px}
+.timeline .tl-cost b{color:var(--head)}
+
+/* Slides and decisions */
+.slides{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+@media(min-width:900px){.slides{grid-template-columns:repeat(2,1fr)}}
+.slides li{display:flex;gap:16px;align-items:flex-start;padding:14px 18px;border-radius:10px;border:1px solid var(--line);background:var(--white)}
+.slides .sn{flex:none;width:38px;height:38px;border-radius:8px;background:var(--blue-tint);color:var(--blue);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:17px}
+.slides .st{color:var(--head);font-weight:600;font-size:18px;line-height:1.4}
+.slides .ss{font-size:16px;display:block;font-weight:400;color:var(--body);margin-top:2px}
+.decisions{display:grid;gap:16px}
+@media(min-width:900px){.decisions{grid-template-columns:repeat(3,1fr)}}
+.decision{padding:24px;border-radius:var(--radius);background:var(--navy);color:var(--on-navy)}
+.decision .dn{font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-light);margin-bottom:8px}
+.decision h4{color:var(--white);font-size:22px;margin-bottom:8px}
+.decision p{font-size:17px}
+
+/* Lessons */
+.takeaways{list-style:none;margin:0;padding:0;display:grid;gap:12px;max-width:960px}
+.takeaways li{display:flex;gap:16px;align-items:flex-start;padding:18px 22px;border-radius:var(--radius);background:var(--blue-tint);color:var(--head)}
+.takeaways svg{width:22px;height:22px;color:var(--blue);flex:none;margin-top:4px}
+.takeaways b{color:var(--head);font-weight:700}
+
+/* Tools */
+.tf-grid{display:grid;gap:24px}
+@media(min-width:900px){.tf-grid{grid-template-columns:1fr 1fr}}
+.tf-col{padding:32px 24px}
+.tf-col > h3{margin-bottom:6px}
+.tf-col > p{margin-bottom:24px}
+.tf-item{display:flex;gap:16px;padding:18px 0;border-top:1px solid var(--line)}
+.tf-item .ti{flex:none;width:44px;height:44px;border-radius:10px;background:var(--blue-tint);color:var(--blue);display:flex;align-items:center;justify-content:center}
+.tf-item .ti svg{width:22px;height:22px}
+.tf-item h4{margin-bottom:2px}
+.tf-item p{font-size:17px}
+
+/* Contact */
+.contact-wrap{display:grid;gap:40px}
+.contact-wrap > *{min-width:0}
+@media(min-width:960px){.contact-wrap{grid-template-columns:1.1fr 1fr;gap:64px;align-items:center}}
+.contact-wrap h2{font-size:40px;margin-bottom:16px}
+@media(max-width:640px){.contact-wrap h2{font-size:32px}}
+.contact-wrap .lead{font-size:20px;margin-bottom:28px}
+.open-badge{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;background:rgba(37,99,235,.18);border:1px solid rgba(147,180,245,.35);color:var(--white);font-weight:600;font-size:16px;margin-bottom:20px}
+.open-badge i{width:10px;height:10px;border-radius:50%;background:var(--blue-light);box-shadow:0 0 0 4px rgba(147,180,245,.2)}
+.contact-list{display:grid;gap:12px}
+.contact-item{display:flex;gap:16px;align-items:center;padding:18px 20px;border-radius:var(--radius);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);text-decoration:none;color:var(--white);transition:background .15s,border-color .15s}
+a.contact-item:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.22)}
+.contact-item .ci{flex:none;width:44px;height:44px;border-radius:10px;background:rgba(37,99,235,.25);color:var(--blue-light);display:flex;align-items:center;justify-content:center}
+.contact-item .ci svg{width:22px;height:22px}
+.contact-item small{display:block;font-size:15px;color:rgba(255,255,255,.7);font-weight:500}
+.contact-item span{font-size:18px;font-weight:600;word-break:break-word}
+footer{background:var(--navy);border-top:1px solid rgba(255,255,255,.08);padding-block:28px;color:rgba(255,255,255,.72);font-size:16px}
+footer .container{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+[hidden]{display:none!important}</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-linkedin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+<symbol id="i-arrow-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></symbol>
+<symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
+<symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16v-3"/><path d="M11 16V9"/><path d="M15 16v-5"/><path d="M19 16V6"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+<symbol id="i-brief" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M2 13h20"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+<symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></symbol>
+<symbol id="i-sheet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/></symbol>
+<symbol id="i-present" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 12l3-3 3 3 4-4"/></symbol>
+<symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4"/><path d="M4 4h12l-2 4 2 4H4"/></symbol>
+<symbol id="i-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 21h14"/><path d="m5 7 7-4 7 4"/><path d="M2 14l3-7 3 7a3 3 0 0 1-6 0z"/><path d="M16 14l3-7 3 7a3 3 0 0 1-6 0z"/></symbol>
+<symbol id="i-route" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+</defs></svg>
+<header class="nav">
+  <div class="container">
+    <a class="brand" href="#top">Governance, Risk &amp; Compliance</a>
+    <button class="menu-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links"><svg aria-hidden="true"><use href="#i-menu"/></svg></button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#assessment">Assessment</a></li>
+      <li><a href="#lessons">Lessons</a></li>
+      <li><a href="#tools">Tools</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a class="back" href="https://bseun3785-glitch.github.io/grc-portfolio/" target="_blank" rel="noopener">Main portfolio</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ 1. HERO ============ -->
+<section class="hero bg-navy" aria-labelledby="hero-h">
+  <div class="container">
+    <p class="hero-person">Seun Bakare<span class="sep" aria-hidden="true"></span><span class="role">GRC Analyst</span></p>
+    <div class="contact-row">
+      <a href="mailto:bseun3785@gmail.com"><svg aria-hidden="true"><use href="#i-mail"/></svg>bseun3785@gmail.com</a>
+      <a href="tel:+18255617046"><svg aria-hidden="true"><use href="#i-phone"/></svg>825-561-7046</a>
+      <span><svg aria-hidden="true"><use href="#i-pin"/></svg>Calgary, AB</span>
+      <a href="https://www.linkedin.com/in/oluwaseun-bakare-62097796/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-linkedin"/></svg>LinkedIn</a>
+    </div>
+    <span class="hero-kicker">GRC Portfolio Project</span>
+    <h1 id="hero-h">Information Security &amp; Privacy Risk Assessment</h1>
+    <p class="hero-tagline">From asset inventory to a <em>management decision</em>, in ten steps.</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="#assessment">View the Assessment <svg aria-hidden="true"><use href="#i-arrow-down"/></svg></a>
+      <a class="btn btn-ghost" href="files/Seun_Bakare_GRC_Portfolio.pdf" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-download"/></svg>Download Full Report (PDF)</a>
+    </div>
+    <div class="badges" aria-label="Frameworks and laws">
+      <span class="badge"><svg aria-hidden="true"><use href="#i-check"/></svg>NIST CSF 2.0</span>
+      <span class="badge"><svg aria-hidden="true"><use href="#i-check"/></svg>CIS Controls v8</span>
+      <span class="badge"><svg aria-hidden="true"><use href="#i-check"/></svg>PIPEDA</span>
+      <span class="badge"><svg aria-hidden="true"><use href="#i-check"/></svg>Québec Law 25</span>
+    </div>
+    <p class="hero-note"><strong>Please note:</strong> Sandymichodrian Software Inc. is a <strong>fictional company</strong> I created for this practice project. No real company's data is used. All names, figures, systems, findings and evidence are invented for learning purposes.</p>
+  </div>
+</section>
+
+<!-- ============ 2. ABOUT ============ -->
+<section id="about" class="bg-white" aria-labelledby="about-h">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-copy">
+        <span class="eyebrow">About this project</span>
+        <h2 id="about-h" style="margin-bottom:24px">A complete risk assessment for a growing SaaS company</h2>
+        <p class="lead">I acted as the GRC Analyst for a 250-person Canadian software company and carried out a full security and privacy risk assessment, the way it would run in a real engagement.</p>
+        <p>Because the company is fictional, the evidence that control owners returned is simulated, with a realistic mix of complete, partial and missing responses. Every risk, control and action traces back to the same 14 assets, so the whole assessment reads as one connected piece of work.</p>
+      </div>
+      <aside class="card company-card" aria-labelledby="co-h">
+        <span class="eyebrow">The client</span>
+        <h3 id="co-h">About Sandymichodrian Software Inc. (fictional)</h3>
+        <p>Makes PineDesk, a customer-engagement SaaS platform used by 2,000 business customers (about 1.8 million end-contact records).</p>
+        <ul class="company-facts">
+          <li><svg aria-hidden="true"><use href="#i-pin"/></svg><span>Toronto, Ontario, with a second office in Montréal, Québec</span></li>
+          <li><svg aria-hidden="true"><use href="#i-users"/></svg><span>250 employees and a 3-person security team</span></li>
+          <li><svg aria-hidden="true"><use href="#i-cloud"/></svg><span>AWS, Salesforce, Workday, Okta, Google Workspace, GitHub and Zendesk</span></li>
+          <li><svg aria-hidden="true"><use href="#i-scale"/></svg><span>Subject to PIPEDA and Québec Law 25; customers ask for SOC 2</span></li>
+        </ul>
+        <p class="fictional"><strong>Fictional company.</strong> No real company's data is used anywhere in this project.</p>
+      </aside>
+    </div>
+
+    <div class="steps-wrap">
+      <h3>The ten steps</h3>
+      <p>Each step builds on the one before it, from understanding what the company must protect to asking leadership for a decision.</p>
+      <ol class="steps"><li class="card step"><span class="step-n">1</span><div><h4>Identify assets</h4><p>14 assets rated for confidentiality, integrity and availability.</p></div></li><li class="card step"><span class="step-n">2</span><div><h4>Identify risks</h4><p>16 risks written as cause, event and impact.</p></div></li><li class="card step"><span class="step-n">3</span><div><h4>Build a risk register</h4><p>Scored 5 x 5 with owners and existing controls.</p></div></li><li class="card step"><span class="step-n">4</span><div><h4>Map to NIST CSF 2.0</h4><p>A primary function and subcategories for every risk.</p></div></li><li class="card step"><span class="step-n">5</span><div><h4>Identify controls</h4><p>19 controls with CIS Controls v8 references.</p></div></li><li class="card step"><span class="step-n">6</span><div><h4>Request evidence</h4><p>19 evidence requests tracked to a response.</p></div></li><li class="card step"><span class="step-n">7</span><div><h4>Gap assessment</h4><p>Design, operating effectiveness and maturity per control.</p></div></li><li class="card step"><span class="step-n">8</span><div><h4>Remediation plan</h4><p>21 costed actions in four phases.</p></div></li><li class="card step"><span class="step-n">9</span><div><h4>Prioritize risks</h4><p>Ranked list and heat maps, before and after.</p></div></li><li class="card step"><span class="step-n">10</span><div><h4>Present to management</h4><p>12-slide deck asking for three decisions.</p></div></li></ol>
+    </div>
+
+    <div class="overview-table">
+      <h3>Deliverables at a glance</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Deliverable</th><th>What it contains</th><th>Format</th><th>File</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Risk Register Workbook</strong></td><td>9 tabs: assets, risks, CSF mapping, controls, evidence, gaps, remediation, priorities and heat maps, with live scoring formulas</td><td>Excel</td><td><a href="files/Sandymichodrian_Risk_Register.xlsx">Download</a></td></tr>
+            <tr><td><strong>Management Presentation</strong></td><td>12 slides with speaker notes, closing with three decisions for leadership</td><td>PowerPoint</td><td><a href="files/Sandymichodrian_Management_Findings.pptx">Download</a></td></tr>
+            <tr><td><strong>Portfolio Report</strong></td><td>29-page write-up of the method, results and lessons learned</td><td>PDF</td><td><a href="files/Seun_Bakare_GRC_Portfolio.pdf" target="_blank" rel="noopener">Download</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. EXECUTIVE SUMMARY ============ -->
+<section id="summary" class="bg-soft summary" aria-labelledby="summary-h">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Executive summary</span>
+      <h2 id="summary-h">The headline results</h2>
+      <p>What leadership needs to know, before any detail.</p>
+    </div>
+    <div class="stats">
+      <div class="stat is-critical"><div class="n">1</div><div class="l">Critical risk</div></div>
+      <div class="stat is-high"><div class="n">7</div><div class="l">High risks</div></div>
+      <div class="stat"><div class="n">10</div><div class="l">Controls with a High gap</div></div>
+      <div class="stat"><div class="n">1.4<small> / 5</small></div><div class="l">Average control maturity</div></div>
+      <div class="stat is-total"><div class="n">215<small> &rarr; 96</small></div><div class="l">Total risk score, before and after the plan</div></div>
+    </div>
+    <ul class="summary-list">
+      <li><span class="k">Biggest exposure</span><p>AWS admin credentials without strong protection could give an attacker all 1.8 million customer records.</p></li>
+      <li><span class="k">Privacy gap</span><p>No privacy impact assessments, no breach register and no published Privacy Officer, as PIPEDA and Québec Law 25 require.</p></li>
+      <li><span class="k">Blind spots</span><p>Nobody monitors alerts around the clock, and backups have never been test-restored.</p></li>
+      <li><span class="k">Strength</span><p>All customer data at rest is encrypted with managed keys, which meets the target.</p></li>
+      <li><span class="k">The plan</span><p>21 actions over 12 months for about $136,000 one-off and $228,000 a year. No Critical or High risks remain afterwards.</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 4. SKILLS ============ -->
+<section id="skills" class="bg-white" aria-labelledby="skills-h">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Skills demonstrated</span>
+      <h2 id="skills-h">Eight GRC skills, shown in working documents</h2>
+    </div>
+    <div class="grid grid-4"><article class="card skill"><div class="skill-icon"><svg aria-hidden="true"><use href="#i-gauge"/></svg></div><h3>Risk Assessment</h3><p>Asset and threat identification, cause-event-impact risk statements, 5 x 5 Likelihood x Impact scoring.</p><p class="where"><b>Shown in:</b> Steps 1 to 3</p></article><article class="card skill"><div class="skill-icon"><svg aria-hidden="true"><use href="#i-layers"/></svg></div><h3>Framework Mapping</h3><p>Every risk and control mapped to NIST CSF 2.0 subcategories, with CIS Controls v8 safeguards.</p><p class="where"><b>Shown in:</b> Steps 4 and 5</p></article><article class="card skill"><div class="skill-icon"><svg aria-hidden="true"><use href="#i-scale"/></svg></div><h3>Privacy Compliance</h3><p>PIPEDA and Québec Law 25: breach records, privacy impact assessments, Privacy Officer, retention limits.</p><p class="where"><b>Shown in:</b> Risks R09, R12, R13</p></article><article class="card skill"><div class="skill-icon"><svg aria-hidden="true"><use href="#i-search"/></svg></div><h3>Audit and Evidence</h3><p>Planned evidence requests for 19 controls, tracked responses and turned evidence into findings.</p><p class="where"><b>Shown in:</b> Step 6</p></article><article class="card skill"><div class="skill-icon"><svg aria-hidden="true"><use href="#i-shield"/></svg></div><h3>Gap Assessment</h3><p>Rated design and operating effectiveness and measured current against target maturity.</p><p class="where"><b>Shown in:</b> Step 7</p></article><article class="card skill"><div class="skill-icon"><svg aria-hidden="true"><use href="#i-route"/></svg></div><h3>Remediation Planning</h3><p>A phased, costed 12-month plan with owners, dates and success measures.</p><p class="where"><b>Shown in:</b> Step 8</p></article><article class="card skill"><div class="skill-icon"><svg aria-hidden="true"><use href="#i-flag"/></svg></div><h3>Prioritization</h3><p>Ranked risks by score, impact and regulatory exposure, with before and after heat maps.</p><p class="where"><b>Shown in:</b> Step 9</p></article><article class="card skill"><div class="skill-icon"><svg aria-hidden="true"><use href="#i-brief"/></svg></div><h3>Executive Communication</h3><p>A 12-slide deck that leads with the bottom line and asks for clear decisions.</p><p class="where"><b>Shown in:</b> Step 10</p></article></div>
+  </div>
+</section>
+
+<!-- ============ 5. ASSESSMENT ============ -->
+<section id="assessment" class="bg-soft" aria-labelledby="assessment-h">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">The assessment</span>
+      <h2 id="assessment-h">Ten steps, one company, one set of risks</h2>
+      <p>The work is grouped into five parts. Open the details in any part for the full tables from the workbook.</p>
+    </div>
+    <nav class="project-nav" aria-label="Jump to part">
+      <a href="#part1"><span>1&ndash;3</span> Risk Register</a>
+      <a href="#part2"><span>4&ndash;5</span> CSF Mapping and Controls</a>
+      <a href="#part3"><span>6&ndash;7</span> Evidence and Gaps</a>
+      <a href="#part4"><span>8&ndash;9</span> Roadmap and Priorities</a>
+      <a href="#part5"><span>10</span> Management Presentation</a>
+    </nav>
+
+    <!-- ===== PART 1 ===== -->
+    <article id="part1" class="card project" aria-labelledby="part1-h">
+      <div class="project-head">
+        <span class="eyebrow">Steps 1 to 3</span>
+        <h3 id="part1-h">Assets and Risk Register</h3>
+        <p class="sub">14 assets and 16 risks, scored Likelihood x Impact</p>
+        <div class="tags"><span class="tag">Excel with live formulas</span><span class="tag">5 x 5 scoring</span><span class="tag">Fictional company</span></div>
+      </div>
+      <div class="project-body">
+        <div class="impact"><svg aria-hidden="true"><use href="#i-target"/></svg><div><span class="label">Impact</span><p>Identified 16 risks across 14 assets: 1 Critical, 7 High and 8 Medium. The Critical risk, privileged AWS credentials without strong protection, could expose all 1.8 million customer records.</p></div></div>
+        <p class="intro">I started with what the company must protect. Each asset was rated for confidentiality, integrity and availability, and each risk was written as a cause, an event and an impact, then scored with existing controls in place.</p>
+        <div class="two-col">
+          <div>
+            <div class="stats">
+              <div class="stat is-critical"><div class="n">1</div><div class="l">Critical</div></div>
+              <div class="stat is-high"><div class="n">7</div><div class="l">High</div></div>
+              <div class="stat"><div class="n">8</div><div class="l">Medium</div></div>
+              <div class="stat"><div class="n">0</div><div class="l">Low</div></div>
+              <div class="stat is-total"><div class="n">16</div><div class="l">Total risks</div></div>
+            </div>
+            <div class="callout"><p><strong>What this tells leadership.</strong> One risk is critical: compromise of privileged AWS credentials (R01, score 20). The seven High risks cluster around identity, monitoring, patching, backups and privacy law, so a small number of controls cuts most of the exposure.</p></div>
+          </div>
+          <figure class="chart" role="img" aria-label="Bar chart of risks by level: Critical 1, High 7, Medium 8, Low 0">
+            <h4>Risks by level</h4>
+            <p class="cap">16 risks, scored with existing controls in place</p>
+            <div class="bar-row"><span class="name">Critical</span><div class="bar-track"><div class="bar bar-critical" style="width:12.5%"></div></div><span class="val">1</span></div><div class="bar-row"><span class="name">High</span><div class="bar-track"><div class="bar bar-high" style="width:87.5%"></div></div><span class="val">7</span></div><div class="bar-row"><span class="name">Medium</span><div class="bar-track"><div class="bar bar-medium" style="width:100.0%"></div></div><span class="val">8</span></div><div class="bar-row"><span class="name">Low</span><div class="bar-track"><div class="bar bar-low" style="width:0.0%"></div></div><span class="val">0</span></div>
+          </figure>
+        </div>
+
+        <div class="critical-box" aria-labelledby="r01-h">
+          <div class="cb-head"><span class="cb-id">R01 &middot; CRITICAL</span><strong id="r01-h">Compromise of privileged AWS credentials</strong></div>
+          <div class="cb-body">
+            <div><div class="k">Score</div><div class="score-big">20 <small>/ 25</small></div><div class="v"><small>Likelihood 4 x Impact 5</small></div></div>
+            <div><div class="k">CSF 2.0</div><div class="v">Protect<small>PR.AA-01, PR.AA-03, PR.AA-05</small></div></div>
+            <div><div class="k">Owner</div><div class="v">CTO<small>Treatment: Mitigate</small></div></div>
+            <div><div class="k">After the plan</div><div class="v">10 Medium<small>Controls C01, C02, C09</small></div></div>
+            <div class="wide"><div class="k">Weakness found</div><div class="v">14 IAM users with keys older than 90 days; 2 member-account roots without MFA. Existing controls: Okta MFA for console SSO; management-account root has MFA.</div></div>
+            <div class="wide"><div class="k">Fix</div><div class="v">Enable MFA on every root account, delete or rotate the stale keys and move people to AWS Identity Center (Phase 1, within 30 days), then roll out phishing-resistant MFA for admins and engineers.</div></div>
+          </div>
+        </div>
+
+        <div class="details" id="part1-details">
+          <div class="block">
+            <h4>How scoring works</h4>
+            <p class="note">Each risk gets a <strong>Likelihood</strong> (1 to 5) and an <strong>Impact</strong> (1 to 5). Risk Score = Likelihood x Impact. In the Excel workbook the score and level are calculated by formula, so changing a rating updates everything automatically.</p>
+            <div class="levels">
+              <div class="level-card"><span class="pill pill-low">Low 1-7</span><p>Accept and monitor</p></div>
+              <div class="level-card"><span class="pill pill-medium">Medium 8-14</span><p>Mitigate within a defined timeframe</p></div>
+              <div class="level-card"><span class="pill pill-high">High 15-19</span><p>Prioritize; assign owner and deadline</p></div>
+              <div class="level-card"><span class="pill pill-critical">Critical 20-25</span><p>Immediate action; escalate to leadership</p></div>
+            </div>
+          </div>
+
+          <div class="block data">
+            <h4>The risk register</h4>
+            <div class="filters" role="group" aria-label="Filter risks">
+              <div class="filter-group" id="level-filter">
+                <button class="chip" data-level="all" aria-pressed="true">All<span class="c">16</span></button>
+                <button class="chip" data-level="Critical" aria-pressed="false">Critical<span class="c">1</span></button><button class="chip" data-level="High" aria-pressed="false">High<span class="c">7</span></button><button class="chip" data-level="Medium" aria-pressed="false">Medium<span class="c">8</span></button>
+              </div>
+              <label class="select-wrap" for="csf-filter">CSF function
+                <select id="csf-filter"><option value="all">All functions</option><option value="Govern">Govern</option><option value="Identify">Identify</option><option value="Protect">Protect</option><option value="Detect">Detect</option><option value="Respond">Respond</option><option value="Recover">Recover</option></select>
+              </label>
+              <span class="result-count" id="result-count" aria-live="polite">Showing 16 of 16 risks</span>
+            </div>
+            <div class="table-wrap">
+              <table id="register">
+                <thead><tr><th>ID</th><th>Risk</th><th>CSF 2.0</th><th>L</th><th>I</th><th>Score</th><th>Level</th><th>Target</th></tr></thead>
+                <tbody><tr data-level="Critical" data-csf="Protect" class="is-crit"><td class="id">R01</td><td><span class="risk-title">Compromise of privileged AWS credentials</span><span class="mit">Long-lived IAM access keys and root accounts without MFA could let an attacker who steals one key take over production and read all customer PII.</span><span class="meta"><b>Owner:</b> CTO | <b>Weakness found:</b> 14 IAM users with keys older than 90 days; 2 member-account roots without MFA</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.AA-01, PR.AA-03, PR.AA-05</span></td><td class="num">4</td><td class="num">5</td><td class="score">20</td><td><span class="pill pill-critical">Critical</span></td><td class="num">10<span class="meta">Medium</span></td></tr><tr data-level="High" data-csf="Protect"><td class="id">R02</td><td><span class="risk-title">Cloud misconfiguration exposes customer PII</span><span class="mit">Without org-wide guardrails, a public S3 bucket or open database snapshot could expose customer PII, triggering breach notification under PIPEDA and Law 25.</span><span class="meta"><b>Owner:</b> VP Engineering | <b>Weakness found:</b> No SCPs; S3 Block Public Access only on prod; Security Hub in one region</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.PS-01, PR.IR-01, ID.RA-01</span></td><td class="num">3</td><td class="num">5</td><td class="score">15</td><td><span class="pill pill-high">High</span></td><td class="num">8<span class="meta">Medium</span></td></tr><tr data-level="High" data-csf="Protect"><td class="id">R03</td><td><span class="risk-title">Phishing leads to account takeover</span><span class="mit">Push-based MFA can be defeated by MFA fatigue or adversary-in-the-middle phishing, giving access to Salesforce, Google Workspace and Zendesk data.</span><span class="meta"><b>Owner:</b> IT Manager | <b>Weakness found:</b> Push MFA (not phishing-resistant); 22% of staff overdue on training; 14% phishing-simulation click rate</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.AT-01, PR.AA-03</span></td><td class="num">4</td><td class="num">4</td><td class="score">16</td><td><span class="pill pill-high">High</span></td><td class="num">6<span class="meta">Low</span></td></tr><tr data-level="Medium" data-csf="Protect"><td class="id">R04</td><td><span class="risk-title">Excessive and orphaned user access</span><span class="mit">No access reviews and manual offboarding mean former employees and over-privileged users keep access to CRM and HR data.</span><span class="meta"><b>Owner:</b> IT Manager | <b>Weakness found:</b> 11 active Salesforce accounts for terminated staff; offboarding takes ~6 days</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.AA-05, PR.AA-01</span></td><td class="num">4</td><td class="num">3</td><td class="score">12</td><td><span class="pill pill-medium">Medium</span></td><td class="num">6<span class="meta">Low</span></td></tr><tr data-level="High" data-csf="Detect"><td class="id">R05</td><td><span class="risk-title">Attacks go undetected (no 24x7 monitoring)</span><span class="mit">Alerts land in a Slack channel watched only in business hours, so an intrusion overnight or on a weekend may go unnoticed for days.</span><span class="meta"><b>Owner:</b> Security Manager | <b>Weakness found:</b> No SIEM, no on-call, no correlation of logs across AWS, Okta and SaaS</span></td><td><span class="csf-fn">Detect</span><span class="csf-cat">DE.CM-01, DE.AE-02, DE.AE-03</span></td><td class="num">4</td><td class="num">4</td><td class="score">16</td><td><span class="pill pill-high">High</span></td><td class="num">6<span class="meta">Low</span></td></tr><tr data-level="High" data-csf="Recover"><td class="id">R06</td><td><span class="risk-title">Backups fail when needed</span><span class="mit">Backups live in the same account and region as production and have never been test-restored, so a ransomware event or account compromise could destroy both.</span><span class="meta"><b>Owner:</b> VP Engineering | <b>Weakness found:</b> Same-account backups; no restore tests; DR plan draft from 2023</span></td><td><span class="csf-fn">Recover</span><span class="csf-cat">PR.DS-11, RC.RP-01, RC.RP-03</span></td><td class="num">3</td><td class="num">5</td><td class="score">15</td><td><span class="pill pill-high">High</span></td><td class="num">4<span class="meta">Low</span></td></tr><tr data-level="Medium" data-csf="Govern"><td class="id">R07</td><td><span class="risk-title">Breach at a subprocessor handling PII</span><span class="mit">Sandymichodrian remains accountable under PIPEDA for PII it transfers to vendors; 6 of 12 critical vendors have never been reviewed.</span><span class="meta"><b>Owner:</b> Finance / Procurement | <b>Weakness found:</b> No vendor tiering; SOC 2 reports for only 6 of 12 critical vendors</span></td><td><span class="csf-fn">Govern</span><span class="csf-cat">GV.SC-04, GV.SC-05, GV.SC-07</span></td><td class="num">3</td><td class="num">4</td><td class="score">12</td><td><span class="pill pill-medium">Medium</span></td><td class="num">8<span class="meta">Medium</span></td></tr><tr data-level="High" data-csf="Identify"><td class="id">R08</td><td><span class="risk-title">Exploitation of unpatched vulnerabilities</span><span class="mit">Without remediation SLAs, critical vulnerabilities in containers and libraries stay open long enough to be exploited.</span><span class="meta"><b>Owner:</b> VP Engineering | <b>Weakness found:</b> 37 critical findings open more than 30 days; no documented SLA</span></td><td><span class="csf-fn">Identify</span><span class="csf-cat">ID.RA-01, PR.PS-02</span></td><td class="num">4</td><td class="num">4</td><td class="score">16</td><td><span class="pill pill-high">High</span></td><td class="num">8<span class="meta">Medium</span></td></tr><tr data-level="High" data-csf="Govern"><td class="id">R09</td><td><span class="risk-title">Non-compliance with PIPEDA and Québec Law 25</span><span class="mit">No PIAs, no breach register and no published Privacy Officer contact expose Sandymichodrian to Commission d&#x27;accès à l&#x27;information penalties (up to $10M or 2% of worldwide turnover for administrative penalties) and loss of customer trust.</span><span class="meta"><b>Owner:</b> General Counsel | <b>Weakness found:</b> No PIA for cross-border transfers to US subprocessors; no breach register; no retention schedule</span></td><td><span class="csf-fn">Govern</span><span class="csf-cat">GV.OC-03, GV.PO-01, GV.RR-02</span></td><td class="num">4</td><td class="num">4</td><td class="score">16</td><td><span class="pill pill-high">High</span></td><td class="num">6<span class="meta">Low</span></td></tr><tr data-level="Medium" data-csf="Protect"><td class="id">R10</td><td><span class="risk-title">Insider exfiltration of customer data</span><span class="mit">Every Salesforce user can export full reports, and no tool alerts on bulk downloads.</span><span class="meta"><b>Owner:</b> VP Sales | <b>Weakness found:</b> Unrestricted report export; no DLP</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.DS-01, DE.CM-03</span></td><td class="num">2</td><td class="num">4</td><td class="score">8</td><td><span class="pill pill-medium">Medium</span></td><td class="num">4<span class="meta">Low</span></td></tr><tr data-level="Medium" data-csf="Protect"><td class="id">R11</td><td><span class="risk-title">Secrets leaked from source code or CI/CD</span><span class="mit">Hard-coded credentials in repositories or static CI secrets could let an attacker deploy malicious code to production.</span><span class="meta"><b>Owner:</b> VP Engineering | <b>Weakness found:</b> Secret scanning not enabled; test scan found 4 live-looking secrets</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.PS-06, PR.AA-05</span></td><td class="num">3</td><td class="num">4</td><td class="score">12</td><td><span class="pill pill-medium">Medium</span></td><td class="num">6<span class="meta">Low</span></td></tr><tr data-level="Medium" data-csf="Identify"><td class="id">R12</td><td><span class="risk-title">Personal information kept longer than needed</span><span class="mit">PII from churned customers and old exports is retained indefinitely, increasing breach impact and breaching the PIPEDA and Law 25 limits on retention.</span><span class="meta"><b>Owner:</b> General Counsel | <b>Weakness found:</b> No data inventory or retention schedule</span></td><td><span class="csf-fn">Identify</span><span class="csf-cat">ID.AM-07, GV.PO-01</span></td><td class="num">4</td><td class="num">3</td><td class="score">12</td><td><span class="pill pill-medium">Medium</span></td><td class="num">4<span class="meta">Low</span></td></tr><tr data-level="Medium" data-csf="Respond"><td class="id">R13</td><td><span class="risk-title">Ineffective incident response</span><span class="mit">The IR plan predates Law 25 breach duties and has not been exercised in 18 months, so notifications to the OPC, CAI and customers could be late or wrong.</span><span class="meta"><b>Owner:</b> Security Manager | <b>Weakness found:</b> No privacy-breach playbook; no tabletop since April 2025</span></td><td><span class="csf-fn">Respond</span><span class="csf-cat">ID.IM-04, RS.MA-01, RS.CO-02</span></td><td class="num">3</td><td class="num">4</td><td class="score">12</td><td><span class="pill pill-medium">Medium</span></td><td class="num">6<span class="meta">Low</span></td></tr><tr data-level="Medium" data-csf="Govern"><td class="id">R14</td><td><span class="risk-title">Key-person dependency in a 3-person security team</span><span class="mit">Critical knowledge sits with individuals; one resignation or illness leaves key controls unattended.</span><span class="meta"><b>Owner:</b> CTO | <b>Weakness found:</b> Runbooks for 4 of 12 key procedures; no on-call rotation</span></td><td><span class="csf-fn">Govern</span><span class="csf-cat">GV.RR-03, GV.RM-01</span></td><td class="num">3</td><td class="num">3</td><td class="score">9</td><td><span class="pill pill-medium">Medium</span></td><td class="num">4<span class="meta">Low</span></td></tr><tr data-level="Medium" data-csf="Protect"><td class="id">R15</td><td><span class="risk-title">Lost or stolen laptop exposes data</span><span class="mit">Unencrypted or unmanaged laptops holding exports could expose customer or employee PII if lost.</span><span class="meta"><b>Owner:</b> IT Manager | <b>Weakness found:</b> 19 laptops not in MDM; 8% without disk encryption</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.DS-01, PR.PS-01</span></td><td class="num">3</td><td class="num">3</td><td class="score">9</td><td><span class="pill pill-medium">Medium</span></td><td class="num">2<span class="meta">Low</span></td></tr><tr data-level="High" data-csf="Recover"><td class="id">R16</td><td><span class="risk-title">Ransomware disrupts the platform</span><span class="mit">A ransomware attack starting from an unprotected endpoint or stolen credential could encrypt production systems and backups, breaching the 99.9% SLA.</span><span class="meta"><b>Owner:</b> CTO | <b>Weakness found:</b> EDR on 88% of endpoints; backups not immutable</span></td><td><span class="csf-fn">Recover</span><span class="csf-cat">DE.CM-09, PR.DS-11, RC.RP-01</span></td><td class="num">3</td><td class="num">5</td><td class="score">15</td><td><span class="pill pill-high">High</span></td><td class="num">8<span class="meta">Medium</span></td></tr></tbody>
+              </table>
+              <p class="empty" id="register-empty" hidden>No risks match these filters.</p>
+            </div>
+          </div>
+
+          <div class="block data">
+            <h4>Asset inventory</h4>
+            <p class="note">C, I and A are rated 1 to 3. Overall criticality is driven by the highest need.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>ID</th><th>Asset</th><th>Data held</th><th>Owner</th><th>C</th><th>I</th><th>A</th><th>Criticality</th></tr></thead>
+                <tbody><tr><td class="id">A01</td><td><strong>PineDesk production platform</strong><span class="meta">Cloud workload (EKS, EC2, ALB)</span></td><td>Customer PII</td><td>VP Engineering</td><td class="num">3</td><td class="num">3</td><td class="num">3</td><td><span class="pill pill-critical">Critical</span></td></tr><tr><td class="id">A02</td><td><strong>Customer PII database</strong><span class="meta">Data store (RDS PostgreSQL, S3)</span></td><td>Customer PII (~1.8M records)</td><td>VP Engineering</td><td class="num">3</td><td class="num">3</td><td class="num">3</td><td><span class="pill pill-critical">Critical</span></td></tr><tr><td class="id">A03</td><td><strong>AWS accounts and IAM</strong><span class="meta">Cloud control plane</span></td><td>Credentials, configuration</td><td>Security Manager</td><td class="num">3</td><td class="num">3</td><td class="num">3</td><td><span class="pill pill-critical">Critical</span></td></tr><tr><td class="id">A04</td><td><strong>Okta identity provider</strong><span class="meta">SaaS (identity)</span></td><td>Employee identities, MFA factors</td><td>IT Manager</td><td class="num">3</td><td class="num">3</td><td class="num">3</td><td><span class="pill pill-critical">Critical</span></td></tr><tr><td class="id">A05</td><td><strong>Salesforce CRM</strong><span class="meta">SaaS (CRM)</span></td><td>Customer contacts, contracts, pricing</td><td>VP Sales</td><td class="num">3</td><td class="num">2</td><td class="num">2</td><td><span class="pill pill-high">High</span></td></tr><tr><td class="id">A06</td><td><strong>Workday HCM and Payroll</strong><span class="meta">SaaS (HR)</span></td><td>Employee PII (SIN, banking, salary)</td><td>VP People</td><td class="num">3</td><td class="num">3</td><td class="num">2</td><td><span class="pill pill-high">High</span></td></tr><tr><td class="id">A07</td><td><strong>Source code and CI/CD</strong><span class="meta">SaaS (GitHub, GitHub Actions)</span></td><td>Source code, deployment secrets</td><td>VP Engineering</td><td class="num">3</td><td class="num">3</td><td class="num">2</td><td><span class="pill pill-high">High</span></td></tr><tr><td class="id">A08</td><td><strong>Employee endpoints</strong><span class="meta">Hardware (250 laptops)</span></td><td>Cached email, documents, exports</td><td>IT Manager</td><td class="num">2</td><td class="num">2</td><td class="num">2</td><td><span class="pill pill-high">High</span></td></tr><tr><td class="id">A09</td><td><strong>Google Workspace</strong><span class="meta">SaaS (email, docs)</span></td><td>Internal and customer communications</td><td>IT Manager</td><td class="num">2</td><td class="num">2</td><td class="num">2</td><td><span class="pill pill-high">High</span></td></tr><tr><td class="id">A10</td><td><strong>Logging and monitoring stack</strong><span class="meta">Cloud services (CloudTrail, GuardDuty)</span></td><td>Audit logs</td><td>Security Manager</td><td class="num">2</td><td class="num">3</td><td class="num">2</td><td><span class="pill pill-high">High</span></td></tr><tr><td class="id">A11</td><td><strong>Backups and disaster recovery</strong><span class="meta">Cloud service (AWS Backup)</span></td><td>Copies of customer PII</td><td>Cloud Security Engineer</td><td class="num">3</td><td class="num">3</td><td class="num">3</td><td><span class="pill pill-critical">Critical</span></td></tr><tr><td class="id">A12</td><td><strong>Zendesk support desk</strong><span class="meta">SaaS (support)</span></td><td>Support tickets with customer PII</td><td>VP Customer Success</td><td class="num">2</td><td class="num">2</td><td class="num">2</td><td><span class="pill pill-medium">Medium</span></td></tr><tr><td class="id">A13</td><td><strong>Third-party subprocessors</strong><span class="meta">Suppliers (47 vendors)</span></td><td>Varies</td><td>Finance / Procurement</td><td class="num">3</td><td class="num">2</td><td class="num">2</td><td><span class="pill pill-high">High</span></td></tr><tr><td class="id">A14</td><td><strong>Security team and policies</strong><span class="meta">People and process</span></td><td>n/a</td><td>Security Manager</td><td class="num">2</td><td class="num">2</td><td class="num">3</td><td><span class="pill pill-medium">Medium</span></td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-actions">
+          <button class="btn btn-primary js-toggle" aria-expanded="true" aria-controls="part1-details">Hide Details <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+          <a class="btn btn-outline" href="files/Sandymichodrian_Risk_Register.xlsx"><svg aria-hidden="true"><use href="#i-download"/></svg>Download Risk Register (Excel)</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- ===== PART 2 ===== -->
+    <article id="part2" class="card project" aria-labelledby="part2-h">
+      <div class="project-head">
+        <span class="eyebrow">Steps 4 and 5</span>
+        <h3 id="part2-h">NIST CSF 2.0 Mapping and Controls</h3>
+        <p class="sub">Every risk and control tied to a recognized framework</p>
+        <div class="tags"><span class="tag">NIST CSF 2.0</span><span class="tag">CIS Controls v8</span></div>
+      </div>
+      <div class="project-body">
+        <div class="impact"><svg aria-hidden="true"><use href="#i-target"/></svg><div><span class="label">Impact</span><p>Mapped all 16 risks and 19 controls to NIST CSF 2.0 subcategories, with CIS Controls v8 safeguards as references, so progress can be reported to leadership by function.</p></div></div>
+        <p class="intro">Each risk has one primary CSF 2.0 function and the subcategories that describe the outcome it needs. Each control names the risks it treats, its owner and the CIS safeguard it follows.</p>
+        <div class="two-col even">
+          <figure class="chart" role="img" aria-label="Risks by primary CSF function">
+            <h4>Risks by primary CSF function</h4>
+            <p class="cap">Most risk sits in Protect, but the weakest functions are elsewhere</p>
+            <div class="bar-row"><span class="name">Protect</span><div class="bar-track"><div class="bar bar-high" style="width:100.0%"></div></div><span class="val">7</span></div><div class="bar-row"><span class="name">Govern</span><div class="bar-track"><div class="bar bar-high" style="width:42.9%"></div></div><span class="val">3</span></div><div class="bar-row"><span class="name">Identify</span><div class="bar-track"><div class="bar bar-high" style="width:28.6%"></div></div><span class="val">2</span></div><div class="bar-row"><span class="name">Recover</span><div class="bar-track"><div class="bar bar-high" style="width:28.6%"></div></div><span class="val">2</span></div><div class="bar-row"><span class="name">Detect</span><div class="bar-track"><div class="bar bar-high" style="width:14.3%"></div></div><span class="val">1</span></div><div class="bar-row"><span class="name">Respond</span><div class="bar-track"><div class="bar bar-high" style="width:14.3%"></div></div><span class="val">1</span></div>
+          </figure>
+          <figure class="chart">
+            <h4>Control maturity by CSF function</h4>
+            <p class="cap">Average current maturity against target, on a 0 to 5 scale</p>
+            <div class="mat-row"><span class="name">Govern<small>4 controls</small></span><div class="mat-track" role="img" aria-label="Govern: current 1.2, target 3.0 out of 5"><div class="mat-target" style="width:60.0%"></div><div class="mat-now" style="width:25.0%"></div></div><span class="val">1.2<small> / 3.0</small></span></div><div class="mat-row"><span class="name">Identify<small>2 controls</small></span><div class="mat-track" role="img" aria-label="Identify: current 0.5, target 3.0 out of 5"><div class="mat-target" style="width:60.0%"></div><div class="mat-now" style="width:10.0%"></div></div><span class="val">0.5<small> / 3.0</small></span></div><div class="mat-row"><span class="name">Protect<small>10 controls</small></span><div class="mat-track" role="img" aria-label="Protect: current 1.8, target 3.4 out of 5"><div class="mat-target" style="width:68.0%"></div><div class="mat-now" style="width:36.0%"></div></div><span class="val">1.8<small> / 3.4</small></span></div><div class="mat-row"><span class="name">Detect<small>1 control</small></span><div class="mat-track" role="img" aria-label="Detect: current 1.0, target 3.0 out of 5"><div class="mat-target" style="width:60.0%"></div><div class="mat-now" style="width:20.0%"></div></div><span class="val">1.0<small> / 3.0</small></span></div><div class="mat-row"><span class="name">Respond<small>1 control</small></span><div class="mat-track" role="img" aria-label="Respond: current 1.0, target 3.0 out of 5"><div class="mat-target" style="width:60.0%"></div><div class="mat-now" style="width:20.0%"></div></div><span class="val">1.0<small> / 3.0</small></span></div><div class="mat-row"><span class="name">Recover<small>1 control</small></span><div class="mat-track" role="img" aria-label="Recover: current 0.0, target 3.0 out of 5"><div class="mat-target" style="width:60.0%"></div><div class="mat-now" style="width:0.0%"></div></div><span class="val">0.0<small> / 3.0</small></span></div>
+            <div class="legend"><span><i style="background:var(--navy)"></i>Current</span><span><i style="background:var(--blue-tint-2);border-right:3px solid var(--blue)"></i>Target</span></div>
+          </figure>
+        </div>
+        <div class="callout"><p><strong>What this tells leadership.</strong> Detect, Respond and Recover are the weakest functions. The company can protect data reasonably well, but it would be slow to notice an attack and has never proven it can recover.</p></div>
+
+        <div class="details" id="part2-details">
+          <div class="block data">
+            <h4>The 19 controls</h4>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>ID</th><th>Control</th><th>CSF 2.0</th><th>CIS v8</th></tr></thead>
+                <tbody><tr><td class="id">C01</td><td><span class="risk-title">Phishing-resistant MFA for all privileged access; remove long-lived IAM access keys</span><span class="meta"><b>Owner:</b> Cloud Security Engineer</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.AA-01, PR.AA-03, PR.AA-05</span></td><td>CIS 6.5, 5.4</td></tr><tr><td class="id">C02</td><td><span class="risk-title">AWS guardrails: SCPs, org-wide S3 Block Public Access, Security Hub and AWS Config in all accounts</span><span class="meta"><b>Owner:</b> Cloud Security Engineer</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.PS-01, PR.IR-01, ID.RA-01</span></td><td>CIS 4.1, 3.3</td></tr><tr><td class="id">C03</td><td><span class="risk-title">Encryption at rest with KMS for RDS, S3 and backups</span><span class="meta"><b>Owner:</b> Cloud Security Engineer</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.DS-01</span></td><td>CIS 3.11</td></tr><tr><td class="id">C04</td><td><span class="risk-title">Quarterly user access reviews (AWS, Okta, Salesforce, Workday, GitHub)</span><span class="meta"><b>Owner:</b> IT Manager</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.AA-05, GV.RR-04</span></td><td>CIS 5.1, 5.3, 6.8</td></tr><tr><td class="id">C05</td><td><span class="risk-title">Automated joiner-mover-leaver: Workday drives Okta provisioning and deprovisioning</span><span class="meta"><b>Owner:</b> IT Manager</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.AA-01, PR.AA-05</span></td><td>CIS 6.1, 6.2</td></tr><tr><td class="id">C06</td><td><span class="risk-title">Security awareness training and phishing simulations</span><span class="meta"><b>Owner:</b> IT/Security Analyst</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.AT-01, PR.AT-02</span></td><td>CIS 14.1, 14.2</td></tr><tr><td class="id">C07</td><td><span class="risk-title">Endpoint protection: MDM enrolment, EDR and full-disk encryption on all laptops</span><span class="meta"><b>Owner:</b> IT Manager</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.PS-01, PR.DS-01, DE.CM-09</span></td><td>CIS 3.6, 10.1, 4.1</td></tr><tr><td class="id">C08</td><td><span class="risk-title">Vulnerability management with remediation SLAs (Critical 7 days, High 30 days)</span><span class="meta"><b>Owner:</b> Cloud Security Engineer</span></td><td><span class="csf-fn">Identify</span><span class="csf-cat">ID.RA-01, PR.PS-02</span></td><td>CIS 7.1, 7.3, 7.4</td></tr><tr><td class="id">C09</td><td><span class="risk-title">Centralized logging, SIEM correlation and 24x7 alert monitoring (MDR)</span><span class="meta"><b>Owner:</b> Security Manager</span></td><td><span class="csf-fn">Detect</span><span class="csf-cat">PR.PS-04, DE.CM-01, DE.CM-03, DE.AE-02, DE.AE-03</span></td><td>CIS 8.2, 8.11, 13.1</td></tr><tr><td class="id">C10</td><td><span class="risk-title">Immutable, cross-account backups with quarterly restore tests</span><span class="meta"><b>Owner:</b> Cloud Security Engineer</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.DS-11, RC.RP-03</span></td><td>CIS 11.2, 11.4, 11.5</td></tr><tr><td class="id">C11</td><td><span class="risk-title">Disaster recovery plan with approved RTO/RPO and annual failover test</span><span class="meta"><b>Owner:</b> VP Engineering</span></td><td><span class="csf-fn">Recover</span><span class="csf-cat">PR.IR-03, RC.RP-01, RC.CO-03</span></td><td>CIS 11.1</td></tr><tr><td class="id">C12</td><td><span class="risk-title">Incident response plan with privacy-breach playbook and annual tabletop</span><span class="meta"><b>Owner:</b> Security Manager</span></td><td><span class="csf-fn">Respond</span><span class="csf-cat">ID.IM-04, RS.MA-01, RS.CO-02, RS.CO-03</span></td><td>CIS 17.4, 17.7</td></tr><tr><td class="id">C13</td><td><span class="risk-title">Privacy program: Privacy Officer, PIAs, breach register, Law 25 obligations</span><span class="meta"><b>Owner:</b> General Counsel</span></td><td><span class="csf-fn">Govern</span><span class="csf-cat">GV.OC-03, GV.PO-01, GV.RR-02</span></td><td>CIS 3.1</td></tr><tr><td class="id">C14</td><td><span class="risk-title">Data inventory, classification and retention schedule with automated deletion</span><span class="meta"><b>Owner:</b> Security Manager</span></td><td><span class="csf-fn">Identify</span><span class="csf-cat">ID.AM-07, PR.DS-01, GV.PO-01</span></td><td>CIS 3.1, 3.2, 3.4</td></tr><tr><td class="id">C15</td><td><span class="risk-title">Third-party risk management: vendor tiering, security reviews, DPAs</span><span class="meta"><b>Owner:</b> Finance / Procurement</span></td><td><span class="csf-fn">Govern</span><span class="csf-cat">GV.SC-04, GV.SC-05, GV.SC-07, ID.AM-04</span></td><td>CIS 15.1, 15.2, 15.4</td></tr><tr><td class="id">C16</td><td><span class="risk-title">Secure SDLC: secret scanning, SAST/SCA, branch protection, short-lived CI credentials</span><span class="meta"><b>Owner:</b> VP Engineering</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.PS-06, PR.AA-05</span></td><td>CIS 16.1, 16.12</td></tr><tr><td class="id">C17</td><td><span class="risk-title">Data loss prevention: restrict and alert on bulk exports from Salesforce and production</span><span class="meta"><b>Owner:</b> Security Manager</span></td><td><span class="csf-fn">Protect</span><span class="csf-cat">PR.DS-01, DE.CM-03</span></td><td>CIS 3.13</td></tr><tr><td class="id">C18</td><td><span class="risk-title">Security resourcing: runbooks, cross-training, on-call rotation, MDR retainer</span><span class="meta"><b>Owner:</b> CTO</span></td><td><span class="csf-fn">Govern</span><span class="csf-cat">GV.RR-03, GV.RM-01</span></td><td>n/a</td></tr><tr><td class="id">C19</td><td><span class="risk-title">Information security policy framework approved by leadership and reviewed annually</span><span class="meta"><b>Owner:</b> Security Manager</span></td><td><span class="csf-fn">Govern</span><span class="csf-cat">GV.PO-01, GV.PO-02, GV.OV-01</span></td><td>n/a</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="project-actions">
+          <button class="btn btn-primary js-toggle" aria-expanded="true" aria-controls="part2-details">Hide Details <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+          <a class="btn btn-outline" href="files/Sandymichodrian_Risk_Register.xlsx"><svg aria-hidden="true"><use href="#i-download"/></svg>Download Workbook (Excel)</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- ===== PART 3 ===== -->
+    <article id="part3" class="card project" aria-labelledby="part3-h">
+      <div class="project-head">
+        <span class="eyebrow">Steps 6 and 7</span>
+        <h3 id="part3-h">Evidence Requests and Gap Assessment</h3>
+        <p class="sub">Testing whether controls exist on paper and work in practice</p>
+        <div class="tags"><span class="tag">19 evidence requests</span><span class="tag">Design and operating effectiveness</span><span class="tag">Simulated responses</span></div>
+      </div>
+      <div class="project-body">
+        <div class="impact"><svg aria-hidden="true"><use href="#i-target"/></svg><div><span class="label">Impact</span><p>Requested evidence for 19 controls and rated each one's design and operating effectiveness. 10 controls have a High gap and average maturity is 1.4 out of 5. Only encryption at rest fully met its target.</p></div></div>
+        <p class="intro">I sent each control owner a specific evidence request with a due date, tracked what came back and compared it with what the control should achieve. The responses are simulated, with the mix of complete, partial and missing answers a real assessment would see.</p>
+        <div class="ev-stats">
+          <div class="stat"><div class="n">5</div><div class="l">Complete responses</div></div>
+          <div class="stat is-high"><div class="n">10</div><div class="l">Partial responses</div></div>
+          <div class="stat"><div class="n">3</div><div class="l">Control does not exist</div></div>
+          <div class="stat is-critical"><div class="n">1</div><div class="l">Not provided</div></div>
+        </div>
+        <div class="block">
+          <h4>What the evidence showed</h4>
+          <div class="findings">
+            <div class="finding"><div class="big">11</div><div class="what">Active accounts for leavers</div><p>Salesforce accounts still open for people who had left, the latest 4 months earlier.</p></div>
+            <div class="finding"><div class="big">3,400</div><div class="what">Contacts in a public bucket</div><p>A marketing S3 bucket held a leads file open to the internet. It was made private.</p></div>
+            <div class="finding"><div class="big">2 <span>days</span></div><div class="what">To acknowledge an alert</div><p>A high-severity GuardDuty alert raised on a Saturday was first seen on Monday.</p></div>
+            <div class="finding"><div class="big">37</div><div class="what">Critical vulnerabilities overdue</div><p>Open for more than 30 days with no remediation SLA. The oldest was 140 days.</p></div>
+          </div>
+        </div>
+
+        <div class="details" id="part3-details">
+          <div class="block data">
+            <h4>Gap assessment</h4>
+            <p class="note">Maturity: 0 none, 1 ad hoc, 2 repeatable, 3 defined, 4 managed, 5 optimized. Current &rarr; target.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>ID</th><th>Control and gap</th><th>Maturity</th><th>Design / operating</th><th>Gap</th></tr></thead>
+                <tbody><tr><td class="id">C01</td><td><span class="risk-title">Phishing-resistant MFA for all privileged access; remove long-lived IAM access keys</span><span class="mit">Push MFA only; 2 root accounts without MFA; 14 stale access keys.</span></td><td class="num"><span class="score">2</span> &rarr; 4</td><td>Partially designed<span class="meta">Partially effective</span></td><td><span class="pill pill-high">High gap</span></td></tr><tr><td class="id">C02</td><td><span class="risk-title">AWS guardrails: SCPs, org-wide S3 Block Public Access, Security Hub and AWS Config in all accounts</span><span class="mit">No preventive guardrails; detective tooling in one account only; public bucket with PII found.</span></td><td class="num"><span class="score">1</span> &rarr; 3</td><td>Partially designed<span class="meta">Ineffective</span></td><td><span class="pill pill-high">High gap</span></td></tr><tr><td class="id">C03</td><td><span class="risk-title">Encryption at rest with KMS for RDS, S3 and backups</span><span class="mit">Meets target. Keep monitoring through Security Hub.</span></td><td class="num"><span class="score">4</span> &rarr; 4</td><td>Designed<span class="meta">Effective</span></td><td><span class="pill pill-met">Target met</span></td></tr><tr><td class="id">C04</td><td><span class="risk-title">Quarterly user access reviews (AWS, Okta, Salesforce, Workday, GitHub)</span><span class="mit">No access reviews; 11 orphaned Salesforce accounts.</span></td><td class="num"><span class="score">0</span> &rarr; 3</td><td>Not designed<span class="meta">Not implemented</span></td><td><span class="pill pill-high">High gap</span></td></tr><tr><td class="id">C05</td><td><span class="risk-title">Automated joiner-mover-leaver: Workday drives Okta provisioning and deprovisioning</span><span class="mit">Deprovisioning manual and slow (avg 6 days).</span></td><td class="num"><span class="score">2</span> &rarr; 4</td><td>Partially designed<span class="meta">Partially effective</span></td><td><span class="pill pill-medium">Medium gap</span></td></tr><tr><td class="id">C06</td><td><span class="risk-title">Security awareness training and phishing simulations</span><span class="mit">Completion 78% vs 95% target; phishing simulations not regular; no role-based training.</span></td><td class="num"><span class="score">2</span> &rarr; 3</td><td>Designed<span class="meta">Partially effective</span></td><td><span class="pill pill-medium">Medium gap</span></td></tr><tr><td class="id">C07</td><td><span class="risk-title">Endpoint protection: MDM enrolment, EDR and full-disk encryption on all laptops</span><span class="mit">8-12% of devices outside MDM, EDR or encryption.</span></td><td class="num"><span class="score">3</span> &rarr; 4</td><td>Designed<span class="meta">Partially effective</span></td><td><span class="pill pill-medium">Medium gap</span></td></tr><tr><td class="id">C08</td><td><span class="risk-title">Vulnerability management with remediation SLAs (Critical 7 days, High 30 days)</span><span class="mit">No policy or SLAs; 37 criticals overdue.</span></td><td class="num"><span class="score">1</span> &rarr; 3</td><td>Partially designed<span class="meta">Ineffective</span></td><td><span class="pill pill-high">High gap</span></td></tr><tr><td class="id">C09</td><td><span class="risk-title">Centralized logging, SIEM correlation and 24x7 alert monitoring (MDR)</span><span class="mit">No SIEM, no 24x7 coverage; weekend alert waited 2 days.</span></td><td class="num"><span class="score">1</span> &rarr; 3</td><td>Partially designed<span class="meta">Ineffective</span></td><td><span class="pill pill-high">High gap</span></td></tr><tr><td class="id">C10</td><td><span class="risk-title">Immutable, cross-account backups with quarterly restore tests</span><span class="mit">Backups not isolated or immutable; never test-restored.</span></td><td class="num"><span class="score">2</span> &rarr; 4</td><td>Partially designed<span class="meta">Partially effective</span></td><td><span class="pill pill-high">High gap</span></td></tr><tr><td class="id">C11</td><td><span class="risk-title">Disaster recovery plan with approved RTO/RPO and annual failover test</span><span class="mit">No approved DR plan, RTO/RPO or test.</span></td><td class="num"><span class="score">0</span> &rarr; 3</td><td>Not designed<span class="meta">Not implemented</span></td><td><span class="pill pill-high">High gap</span></td></tr><tr><td class="id">C12</td><td><span class="risk-title">Incident response plan with privacy-breach playbook and annual tabletop</span><span class="mit">No privacy-breach playbook; not exercised in 18 months.</span></td><td class="num"><span class="score">1</span> &rarr; 3</td><td>Partially designed<span class="meta">Ineffective</span></td><td><span class="pill pill-high">High gap</span></td></tr><tr><td class="id">C13</td><td><span class="risk-title">Privacy program: Privacy Officer, PIAs, breach register, Law 25 obligations</span><span class="mit">No Privacy Officer published, PIAs or breach register.</span></td><td class="num"><span class="score">1</span> &rarr; 3</td><td>Partially designed<span class="meta">Ineffective</span></td><td><span class="pill pill-high">High gap</span></td></tr><tr><td class="id">C14</td><td><span class="risk-title">Data inventory, classification and retention schedule with automated deletion</span><span class="mit">No data inventory or retention schedule.</span></td><td class="num"><span class="score">0</span> &rarr; 3</td><td>Not designed<span class="meta">Not implemented</span></td><td><span class="pill pill-high">High gap</span></td></tr><tr><td class="id">C15</td><td><span class="risk-title">Third-party risk management: vendor tiering, security reviews, DPAs</span><span class="mit">No tiering; half of critical vendors unreviewed.</span></td><td class="num"><span class="score">1</span> &rarr; 3</td><td>Partially designed<span class="meta">Partially effective</span></td><td><span class="pill pill-medium">Medium gap</span></td></tr><tr><td class="id">C16</td><td><span class="risk-title">Secure SDLC: secret scanning, SAST/SCA, branch protection, short-lived CI credentials</span><span class="mit">No secret scanning; static CI keys.</span></td><td class="num"><span class="score">2</span> &rarr; 3</td><td>Partially designed<span class="meta">Partially effective</span></td><td><span class="pill pill-medium">Medium gap</span></td></tr><tr><td class="id">C17</td><td><span class="risk-title">Data loss prevention: restrict and alert on bulk exports from Salesforce and production</span><span class="mit">Unrestricted exports; no monitoring.</span></td><td class="num"><span class="score">0</span> &rarr; 2</td><td>Not designed<span class="meta">Not implemented</span></td><td><span class="pill pill-medium">Medium gap</span></td></tr><tr><td class="id">C18</td><td><span class="risk-title">Security resourcing: runbooks, cross-training, on-call rotation, MDR retainer</span><span class="mit">No on-call, limited runbooks, no MDR.</span></td><td class="num"><span class="score">1</span> &rarr; 3</td><td>Partially designed<span class="meta">Ineffective</span></td><td><span class="pill pill-medium">Medium gap</span></td></tr><tr><td class="id">C19</td><td><span class="risk-title">Information security policy framework approved by leadership and reviewed annually</span><span class="mit">5 policies missing; core policy overdue for review.</span></td><td class="num"><span class="score">2</span> &rarr; 3</td><td>Partially designed<span class="meta">Partially effective</span></td><td><span class="pill pill-low">Low gap</span></td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="block data">
+            <h4>Evidence log</h4>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Control</th><th>Evidence requested and response</th><th>Status</th></tr></thead>
+                <tbody><tr><td class="id">C01</td><td><span class="risk-title">IAM credential report; root MFA status per account; Okta MFA policy screenshot</span><span class="mit">Okta MFA enforced for all users (push only). Root MFA on management account and 4 of 6 member accounts. Credential report: 14 IAM users with access keys &gt; 90 days, 3 &gt; 1 year.</span><span class="meta"><b>Requested from:</b> Cloud Security Engineer | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-09-26</span></td><td><span class="pill pill-medium">Partial</span></td></tr><tr><td class="id">C02</td><td><span class="risk-title">List of SCPs; S3 Block Public Access settings; Security Hub FSBP score per account</span><span class="mit">No SCPs in use. S3 Block Public Access set on prod account only. Security Hub enabled in ca-central-1 for prod only, FSBP score 71%. Two public buckets in the marketing account; one held &#x27;leads_2024.csv&#x27; with 3,400 contact records (now made private).</span><span class="meta"><b>Requested from:</b> Cloud Security Engineer | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-09-29</span></td><td><span class="pill pill-medium">Partial</span></td></tr><tr><td class="id">C03</td><td><span class="risk-title">KMS key list; RDS and S3 encryption settings; backup vault encryption</span><span class="mit">All RDS instances and snapshots encrypted with customer-managed KMS keys; S3 default encryption on all buckets; backup vault encrypted. Key rotation enabled.</span><span class="meta"><b>Requested from:</b> Cloud Security Engineer | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-09-24</span></td><td><span class="pill pill-met">Complete</span></td></tr><tr><td class="id">C04</td><td><span class="risk-title">Last two quarterly access reviews for AWS, Okta, Salesforce, Workday, GitHub</span><span class="mit">No formal access reviews in the last 12 months. Analyst compared the Workday termination list to Salesforce: 11 active accounts belong to people who left (latest 4 months ago).</span><span class="meta"><b>Requested from:</b> IT Manager | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-10-02</span></td><td><span class="pill pill-high">Control missing</span></td></tr><tr><td class="id">C05</td><td><span class="risk-title">JML procedure; Okta provisioning config; sample of 10 leavers with deprovisioning dates</span><span class="mit">Workday to Okta provisioning works for new hires. Deprovisioning is a manual IT ticket; sample of 10 leavers shows average 6 days to disable, worst case 19 days.</span><span class="meta"><b>Requested from:</b> IT Manager | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-09-30</span></td><td><span class="pill pill-medium">Partial</span></td></tr><tr><td class="id">C06</td><td><span class="risk-title">LMS completion report; last phishing simulation results; training content</span><span class="mit">78% completed annual training (target 95%). Last phishing simulation Jan 2026: 14% click rate, 4% entered credentials. No role-based training for engineers or admins.</span><span class="meta"><b>Requested from:</b> IT/Security Analyst | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-09-25</span></td><td><span class="pill pill-met">Complete</span></td></tr><tr><td class="id">C07</td><td><span class="risk-title">MDM device report; EDR coverage report; encryption status export</span><span class="mit">231 of 250 laptops enrolled in MDM (92%). Disk encryption on 92%. EDR installed on 220 devices (88%); 30 devices without EDR are mostly Windows laptops in Sales.</span><span class="meta"><b>Requested from:</b> IT Manager | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-09-27</span></td><td><span class="pill pill-met">Complete</span></td></tr><tr><td class="id">C08</td><td><span class="risk-title">Vulnerability management policy; Inspector findings export; remediation metrics</span><span class="mit">No written policy or SLA. Inspector export: 37 critical and 112 high findings; 37 criticals open &gt; 30 days, oldest 140 days. No metrics tracked.</span><span class="meta"><b>Requested from:</b> Cloud Security Engineer | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-10-01</span></td><td><span class="pill pill-medium">Partial</span></td></tr><tr><td class="id">C09</td><td><span class="risk-title">Logging architecture; alert routing; on-call schedule; sample alert with response</span><span class="mit">CloudTrail organization trail and GuardDuty in all accounts. Okta and Google logs not collected centrally. Alerts post to #sec-alerts in Slack; no on-call, no SIEM. Sample GuardDuty high-severity alert from a Saturday was first acknowledged Monday.</span><span class="meta"><b>Requested from:</b> Security Manager | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-09-28</span></td><td><span class="pill pill-medium">Partial</span></td></tr><tr><td class="id">C10</td><td><span class="risk-title">Backup policy; AWS Backup plans; last restore test record</span><span class="mit">Daily snapshots, 35-day retention, same account and region as production. No Vault Lock. No restore test on record.</span><span class="meta"><b>Requested from:</b> Cloud Security Engineer | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-09-29</span></td><td><span class="pill pill-medium">Partial</span></td></tr><tr><td class="id">C11</td><td><span class="risk-title">Approved DR plan; RTO/RPO; last DR test report</span><span class="mit">Only a 2023 draft DR document was found on Google Drive; no approved RTO/RPO; never tested. Follow-up sent 2026-10-02, no response by report date.</span><span class="meta"><b>Requested from:</b> VP Engineering | <b>Due:</b> 2026-09-28 | <b>Received:</b> -</span></td><td><span class="pill pill-critical">Not provided</span></td></tr><tr><td class="id">C12</td><td><span class="risk-title">IR plan; incident log for last 12 months; last tabletop report</span><span class="mit">IR plan v1.2 (March 2024). No privacy-breach or regulator-notification steps. Last tabletop April 2025. Incident log kept in Jira (9 incidents, none assessed for &#x27;real risk of significant harm&#x27;).</span><span class="meta"><b>Requested from:</b> Security Manager | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-09-26</span></td><td><span class="pill pill-medium">Partial</span></td></tr><tr><td class="id">C13</td><td><span class="risk-title">Privacy Officer designation; PIA records; breach register; privacy policy</span><span class="mit">Privacy policy on website (last updated 2022). No Privacy Officer designated, so under Law 25 the CEO is the person in charge by default, but no title and contact are published. No PIAs. No breach register (PIPEDA requires records of all breaches for 24 months).</span><span class="meta"><b>Requested from:</b> General Counsel | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-10-03</span></td><td><span class="pill pill-medium">Partial</span></td></tr><tr><td class="id">C14</td><td><span class="risk-title">Data inventory; classification policy; retention schedule; deletion logs</span><span class="mit">No data inventory or retention schedule. Churned customers&#x27; data retained indefinitely (oldest from 2017). Shared Drive contains 60+ ad-hoc CSV exports with PII.</span><span class="meta"><b>Requested from:</b> Security Manager | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-09-30</span></td><td><span class="pill pill-high">Control missing</span></td></tr><tr><td class="id">C15</td><td><span class="risk-title">Vendor inventory; risk tiering; due-diligence files for critical vendors; DPAs</span><span class="mit">Spreadsheet of 47 vendors, no risk tiering. 12 vendors process PII; SOC 2 reports on file for 6. DPAs signed with 10 of 12.</span><span class="meta"><b>Requested from:</b> Finance / Procurement | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-10-01</span></td><td><span class="pill pill-medium">Partial</span></td></tr><tr><td class="id">C16</td><td><span class="risk-title">Branch protection settings; secret scanning status; SAST/SCA results; CI credential setup</span><span class="mit">Branch protection and required review on main. Dependabot on. Secret scanning not licensed; analyst-run gitleaks scan found 4 live-looking secrets. CI deploys with static AWS keys stored as repo secrets.</span><span class="meta"><b>Requested from:</b> VP Engineering | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-09-27</span></td><td><span class="pill pill-medium">Partial</span></td></tr><tr><td class="id">C17</td><td><span class="risk-title">DLP tool configuration; Salesforce export permissions; bulk-download alerts</span><span class="mit">No DLP. &#x27;Export Reports&#x27; permission granted to all 180 Salesforce users. No monitoring of bulk downloads.</span><span class="meta"><b>Requested from:</b> Security Manager | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-09-29</span></td><td><span class="pill pill-high">Control missing</span></td></tr><tr><td class="id">C18</td><td><span class="risk-title">Security org chart; runbook index; on-call schedule; MDR contract</span><span class="mit">3 FTE, no on-call rotation, no MDR. Runbooks exist for 4 of 12 key procedures.</span><span class="meta"><b>Requested from:</b> CTO | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-09-28</span></td><td><span class="pill pill-met">Complete</span></td></tr><tr><td class="id">C19</td><td><span class="risk-title">Policy library with approval dates and owners</span><span class="mit">6 of 11 expected policies exist. Information Security Policy last approved July 2023 (overdue). No Access Control, Vendor Management, Data Retention, Vulnerability Management or BC/DR policies.</span><span class="meta"><b>Requested from:</b> Security Manager | <b>Due:</b> 2026-09-28 | <b>Received:</b> 2026-09-25</span></td><td><span class="pill pill-met">Complete</span></td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="project-actions">
+          <button class="btn btn-primary js-toggle" aria-expanded="true" aria-controls="part3-details">Hide Details <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+          <a class="btn btn-outline" href="files/Sandymichodrian_Risk_Register.xlsx"><svg aria-hidden="true"><use href="#i-download"/></svg>Download Workbook (Excel)</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- ===== PART 4 ===== -->
+    <article id="part4" class="card project" aria-labelledby="part4-h">
+      <div class="project-head">
+        <span class="eyebrow">Steps 8 and 9</span>
+        <h3 id="part4-h">Remediation Roadmap and Risk Prioritization</h3>
+        <p class="sub">A costed 12-month plan and where each risk lands afterwards</p>
+        <div class="tags"><span class="tag">21 actions</span><span class="tag">4 phases</span><span class="tag">Costs in CAD</span></div>
+      </div>
+      <div class="project-body">
+        <div class="impact"><svg aria-hidden="true"><use href="#i-target"/></svg><div><span class="label">Impact</span><p>Built a 21-action plan costing about $136,000 one-off and $228,000 a year. No Critical or High risks remain afterwards, and the total risk score falls from 215 to 96, a 55% reduction.</p></div></div>
+        <p class="intro">Every action has an owner, a due date, a cost and a measure of success. The plan starts with quick wins that cost almost nothing, which builds support for the larger investments that follow.</p>
+        <div class="two-col even">
+          <div>
+            <h4 style="margin-bottom:16px">Four phases</h4>
+            <ol class="timeline"><li><span class="dot"></span><div class="tl-card"><div class="tl-top"><span class="when">Phase 1 &middot; 0-30 days</span><span class="owner">5 actions</span></div><p>Quick wins at almost no cost. Removes the only Critical risk.</p><p class="tl-cost"><b>One-off:</b> $12,000 &nbsp;|&nbsp; <b>Annual:</b> $18,000</p></div></li><li><span class="dot"></span><div class="tl-card"><div class="tl-top"><span class="when">Phase 2 &middot; 30-90 days</span><span class="owner">6 actions</span></div><p>Detection and recovery: 24x7 monitoring, immutable backups, patching SLAs.</p><p class="tl-cost"><b>One-off:</b> $44,000 &nbsp;|&nbsp; <b>Annual:</b> $133,000</p></div></li><li><span class="dot"></span><div class="tl-card"><div class="tl-top"><span class="when">Phase 3 &middot; 90-180 days</span><span class="owner">7 actions</span></div><p>Stronger identity and privacy: phishing-resistant MFA, PIAs, data retention, DR testing.</p><p class="tl-cost"><b>One-off:</b> $70,000 &nbsp;|&nbsp; <b>Annual:</b> $39,000</p></div></li><li><span class="dot"></span><div class="tl-card"><div class="tl-top"><span class="when">Phase 4 &middot; 180-365 days</span><span class="owner">3 actions</span></div><p>Mature the program: full policy set, DLP alerts, regular phishing simulations.</p><p class="tl-cost"><b>One-off:</b> $10,000 &nbsp;|&nbsp; <b>Annual:</b> $38,000</p></div></li></ol>
+          </div>
+          <div>
+            <h4 style="margin-bottom:16px">Top five priorities</h4>
+            <ol class="slides" style="grid-template-columns:1fr"><li><span class="sn">1</span><span class="st">Compromise of privileged AWS credentials<span class="ss">R01 &middot; CTO &middot; score 20 &rarr; 10</span></span></li><li><span class="sn">2</span><span class="st">Non-compliance with PIPEDA and Québec Law 25<span class="ss">R09 &middot; General Counsel &middot; score 16 &rarr; 6</span></span></li><li><span class="sn">3</span><span class="st">Phishing leads to account takeover<span class="ss">R03 &middot; IT Manager &middot; score 16 &rarr; 6</span></span></li><li><span class="sn">4</span><span class="st">Attacks go undetected (no 24x7 monitoring)<span class="ss">R05 &middot; Security Manager &middot; score 16 &rarr; 6</span></span></li><li><span class="sn">5</span><span class="st">Exploitation of unpatched vulnerabilities<span class="ss">R08 &middot; VP Engineering &middot; score 16 &rarr; 8</span></span></li></ol>
+          </div>
+        </div>
+
+        <div class="block">
+          <h4>Heat map, before and after the plan</h4>
+          <div class="two-col even"><figure class="heatmap"><h4>Today</h4><p class="cap">Total risk score 215</p><div class="hm-grid"><div class="hm-axis">5</div><div class="hm-cell hm-low"></div><div class="hm-cell hm-medium"></div><div class="hm-cell hm-high"></div><div class="hm-cell hm-critical"></div><div class="hm-cell hm-critical"></div><div class="hm-axis">4</div><div class="hm-cell hm-low"></div><div class="hm-cell hm-medium"></div><div class="hm-cell hm-medium"><span>R04</span><span>R12</span></div><div class="hm-cell hm-high"><span>R03</span><span>R05</span><span>R08</span><span>R09</span></div><div class="hm-cell hm-critical"><span>R01</span></div><div class="hm-axis">3</div><div class="hm-cell hm-low"></div><div class="hm-cell hm-low"></div><div class="hm-cell hm-medium"><span>R14</span><span>R15</span></div><div class="hm-cell hm-medium"><span>R07</span><span>R11</span><span>R13</span></div><div class="hm-cell hm-high"><span>R02</span><span>R06</span><span>R16</span></div><div class="hm-axis">2</div><div class="hm-cell hm-low"></div><div class="hm-cell hm-low"></div><div class="hm-cell hm-low"></div><div class="hm-cell hm-medium"><span>R10</span></div><div class="hm-cell hm-medium"></div><div class="hm-axis">1</div><div class="hm-cell hm-low"></div><div class="hm-cell hm-low"></div><div class="hm-cell hm-low"></div><div class="hm-cell hm-low"></div><div class="hm-cell hm-low"></div><div></div><div class="hm-axis">1</div><div class="hm-axis">2</div><div class="hm-axis">3</div><div class="hm-axis">4</div><div class="hm-axis">5</div></div><p class="hm-legend">Likelihood (rows) x Impact (columns)</p></figure><figure class="heatmap"><h4>After remediation</h4><p class="cap">Total risk score 96</p><div class="hm-grid"><div class="hm-axis">5</div><div class="hm-cell hm-low"></div><div class="hm-cell hm-medium"></div><div class="hm-cell hm-high"></div><div class="hm-cell hm-critical"></div><div class="hm-cell hm-critical"></div><div class="hm-axis">4</div><div class="hm-cell hm-low"></div><div class="hm-cell hm-medium"></div><div class="hm-cell hm-medium"></div><div class="hm-cell hm-high"></div><div class="hm-cell hm-critical"></div><div class="hm-axis">3</div><div class="hm-cell hm-low"></div><div class="hm-cell hm-low"></div><div class="hm-cell hm-medium"></div><div class="hm-cell hm-medium"></div><div class="hm-cell hm-high"></div><div class="hm-axis">2</div><div class="hm-cell hm-low"></div><div class="hm-cell hm-low"><span>R12</span><span>R14</span></div><div class="hm-cell hm-low"><span>R03</span><span>R04</span><span>R05</span><span>R09</span><span>R11</span><span>R13</span></div><div class="hm-cell hm-medium"><span>R02</span><span>R07</span><span>R08</span><span>R16</span></div><div class="hm-cell hm-medium"><span>R01</span></div><div class="hm-axis">1</div><div class="hm-cell hm-low"></div><div class="hm-cell hm-low"><span>R15</span></div><div class="hm-cell hm-low"></div><div class="hm-cell hm-low"><span>R06</span><span>R10</span></div><div class="hm-cell hm-low"></div><div></div><div class="hm-axis">1</div><div class="hm-axis">2</div><div class="hm-axis">3</div><div class="hm-axis">4</div><div class="hm-axis">5</div></div><p class="hm-legend">Likelihood (rows) x Impact (columns)</p></figure></div>
+          <div class="legend"><span><i style="background:var(--navy)"></i>Critical</span><span><i style="background:var(--blue)"></i>High</span><span><i style="background:rgba(37,99,235,.32)"></i>Medium</span><span><i style="background:rgba(37,99,235,.08);border:1px solid var(--line-strong)"></i>Low</span></div>
+        </div>
+
+        <div class="details" id="part4-details">
+          <div class="block data">
+            <h4>Priority ranking</h4>
+            <p class="note">Ranked by score, then impact, then regulatory exposure.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Rank</th><th>ID</th><th>Risk</th><th>Owner</th><th>Today</th><th>Target</th></tr></thead>
+                <tbody><tr><td class="num"><strong>1</strong></td><td class="id">R01</td><td><span class="risk-title">Compromise of privileged AWS credentials</span></td><td>CTO</td><td><span class="score-inline">20</span> <span class="pill pill-critical">Critical</span></td><td><span class="score-inline">10</span> <span class="pill pill-medium">Medium</span></td></tr><tr><td class="num"><strong>2</strong></td><td class="id">R09</td><td><span class="risk-title">Non-compliance with PIPEDA and Québec Law 25</span></td><td>General Counsel</td><td><span class="score-inline">16</span> <span class="pill pill-high">High</span></td><td><span class="score-inline">6</span> <span class="pill pill-low">Low</span></td></tr><tr><td class="num"><strong>3</strong></td><td class="id">R03</td><td><span class="risk-title">Phishing leads to account takeover</span></td><td>IT Manager</td><td><span class="score-inline">16</span> <span class="pill pill-high">High</span></td><td><span class="score-inline">6</span> <span class="pill pill-low">Low</span></td></tr><tr><td class="num"><strong>4</strong></td><td class="id">R05</td><td><span class="risk-title">Attacks go undetected (no 24x7 monitoring)</span></td><td>Security Manager</td><td><span class="score-inline">16</span> <span class="pill pill-high">High</span></td><td><span class="score-inline">6</span> <span class="pill pill-low">Low</span></td></tr><tr><td class="num"><strong>5</strong></td><td class="id">R08</td><td><span class="risk-title">Exploitation of unpatched vulnerabilities</span></td><td>VP Engineering</td><td><span class="score-inline">16</span> <span class="pill pill-high">High</span></td><td><span class="score-inline">8</span> <span class="pill pill-medium">Medium</span></td></tr><tr><td class="num"><strong>6</strong></td><td class="id">R02</td><td><span class="risk-title">Cloud misconfiguration exposes customer PII</span></td><td>VP Engineering</td><td><span class="score-inline">15</span> <span class="pill pill-high">High</span></td><td><span class="score-inline">8</span> <span class="pill pill-medium">Medium</span></td></tr><tr><td class="num"><strong>7</strong></td><td class="id">R06</td><td><span class="risk-title">Backups fail when needed</span></td><td>VP Engineering</td><td><span class="score-inline">15</span> <span class="pill pill-high">High</span></td><td><span class="score-inline">4</span> <span class="pill pill-low">Low</span></td></tr><tr><td class="num"><strong>8</strong></td><td class="id">R16</td><td><span class="risk-title">Ransomware disrupts the platform</span></td><td>CTO</td><td><span class="score-inline">15</span> <span class="pill pill-high">High</span></td><td><span class="score-inline">8</span> <span class="pill pill-medium">Medium</span></td></tr><tr><td class="num"><strong>9</strong></td><td class="id">R07</td><td><span class="risk-title">Breach at a subprocessor handling PII</span></td><td>Finance / Procurement</td><td><span class="score-inline">12</span> <span class="pill pill-medium">Medium</span></td><td><span class="score-inline">8</span> <span class="pill pill-medium">Medium</span></td></tr><tr><td class="num"><strong>10</strong></td><td class="id">R13</td><td><span class="risk-title">Ineffective incident response</span></td><td>Security Manager</td><td><span class="score-inline">12</span> <span class="pill pill-medium">Medium</span></td><td><span class="score-inline">6</span> <span class="pill pill-low">Low</span></td></tr><tr><td class="num"><strong>11</strong></td><td class="id">R11</td><td><span class="risk-title">Secrets leaked from source code or CI/CD</span></td><td>VP Engineering</td><td><span class="score-inline">12</span> <span class="pill pill-medium">Medium</span></td><td><span class="score-inline">6</span> <span class="pill pill-low">Low</span></td></tr><tr><td class="num"><strong>12</strong></td><td class="id">R12</td><td><span class="risk-title">Personal information kept longer than needed</span></td><td>General Counsel</td><td><span class="score-inline">12</span> <span class="pill pill-medium">Medium</span></td><td><span class="score-inline">4</span> <span class="pill pill-low">Low</span></td></tr><tr><td class="num"><strong>13</strong></td><td class="id">R04</td><td><span class="risk-title">Excessive and orphaned user access</span></td><td>IT Manager</td><td><span class="score-inline">12</span> <span class="pill pill-medium">Medium</span></td><td><span class="score-inline">6</span> <span class="pill pill-low">Low</span></td></tr><tr><td class="num"><strong>14</strong></td><td class="id">R14</td><td><span class="risk-title">Key-person dependency in a 3-person security team</span></td><td>CTO</td><td><span class="score-inline">9</span> <span class="pill pill-medium">Medium</span></td><td><span class="score-inline">4</span> <span class="pill pill-low">Low</span></td></tr><tr><td class="num"><strong>15</strong></td><td class="id">R15</td><td><span class="risk-title">Lost or stolen laptop exposes data</span></td><td>IT Manager</td><td><span class="score-inline">9</span> <span class="pill pill-medium">Medium</span></td><td><span class="score-inline">2</span> <span class="pill pill-low">Low</span></td></tr><tr><td class="num"><strong>16</strong></td><td class="id">R10</td><td><span class="risk-title">Insider exfiltration of customer data</span></td><td>VP Sales</td><td><span class="score-inline">8</span> <span class="pill pill-medium">Medium</span></td><td><span class="score-inline">4</span> <span class="pill pill-low">Low</span></td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="block data">
+            <h4>The 21 remediation actions</h4>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>ID</th><th>Action</th><th>Phase</th><th>Risks</th><th>Cost (one-off / annual)</th></tr></thead>
+                <tbody><tr><td class="id">RM01</td><td><span class="risk-title">Enable MFA on all root accounts; delete or rotate the 14 stale IAM keys; move humans to Identity Center</span><span class="meta"><b>Owner:</b> Cloud Security Engineer | <b>Due:</b> 2026-11-13 | <b>Success measure:</b> 100% roots with MFA; 0 human IAM users with keys</span></td><td>Phase 1<span class="meta">0-30 days</span></td><td>R01<span class="meta">Controls C01</span></td><td class="num">$0<span class="meta">$0 / yr</span></td></tr><tr><td class="id">RM02</td><td><span class="risk-title">Apply SCPs (deny root use, deny leaving org, region lock) and org-wide S3 Block Public Access</span><span class="meta"><b>Owner:</b> Cloud Security Engineer | <b>Due:</b> 2026-11-13 | <b>Success measure:</b> SCPs attached to all OUs; 0 public buckets</span></td><td>Phase 1<span class="meta">0-30 days</span></td><td>R01, R02<span class="meta">Controls C02</span></td><td class="num">$0<span class="meta">$0 / yr</span></td></tr><tr><td class="id">RM03</td><td><span class="risk-title">Disable 11 orphaned Salesforce accounts; remove &#x27;Export Reports&#x27; from all except named roles</span><span class="meta"><b>Owner:</b> IT Manager | <b>Due:</b> 2026-10-30 | <b>Success measure:</b> 0 orphaned accounts; export limited to &lt;15 users</span></td><td>Phase 1<span class="meta">0-30 days</span></td><td>R04, R10<span class="meta">Controls C04, C17</span></td><td class="num">$0<span class="meta">$0 / yr</span></td></tr><tr><td class="id">RM04</td><td><span class="risk-title">Publish Privacy Officer title and contact; start a breach register (back-filled for 24 months)</span><span class="meta"><b>Owner:</b> General Counsel | <b>Due:</b> 2026-11-13 | <b>Success measure:</b> Contact on website; register in place</span></td><td>Phase 1<span class="meta">0-30 days</span></td><td>R09<span class="meta">Controls C13</span></td><td class="num">$0<span class="meta">$0 / yr</span></td></tr><tr><td class="id">RM05</td><td><span class="risk-title">Rotate the 4 exposed secrets; enable secret scanning and push protection</span><span class="meta"><b>Owner:</b> VP Engineering | <b>Due:</b> 2026-11-06 | <b>Success measure:</b> 0 open secret alerts</span></td><td>Phase 1<span class="meta">0-30 days</span></td><td>R11<span class="meta">Controls C16</span></td><td class="num">$12,000<span class="meta">$18,000 / yr</span></td></tr><tr><td class="id">RM06</td><td><span class="risk-title">Move backups to a separate account with Vault Lock; run first restore test</span><span class="meta"><b>Owner:</b> Cloud Security Engineer | <b>Due:</b> 2027-01-15 | <b>Success measure:</b> Immutable copies; restore test passed with time recorded</span></td><td>Phase 2<span class="meta">30-90 days</span></td><td>R06, R16<span class="meta">Controls C10</span></td><td class="num">$5,000<span class="meta">$9,000 / yr</span></td></tr><tr><td class="id">RM07</td><td><span class="risk-title">Contract a 24x7 MDR/SOC service with SIEM ingesting AWS, Okta, Google and Salesforce logs</span><span class="meta"><b>Owner:</b> Security Manager | <b>Due:</b> 2027-01-29 | <b>Success measure:</b> Mean time to acknowledge high alerts &lt; 30 min</span></td><td>Phase 2<span class="meta">30-90 days</span></td><td>R05, R01, R03, R10<span class="meta">Controls C09, C18</span></td><td class="num">$15,000<span class="meta">$120,000 / yr</span></td></tr><tr><td class="id">RM08</td><td><span class="risk-title">Approve a vulnerability management standard with SLAs; clear the 37 overdue criticals</span><span class="meta"><b>Owner:</b> Cloud Security Engineer | <b>Due:</b> 2027-01-15 | <b>Success measure:</b> 0 criticals past 7-day SLA; monthly metrics to CTO</span></td><td>Phase 2<span class="meta">30-90 days</span></td><td>R08<span class="meta">Controls C08</span></td><td class="num">$0<span class="meta">$0 / yr</span></td></tr><tr><td class="id">RM09</td><td><span class="risk-title">Automate leaver deprovisioning from Workday to Okta; run the first quarterly access review</span><span class="meta"><b>Owner:</b> IT Manager | <b>Due:</b> 2027-01-29 | <b>Success measure:</b> Leaver access removed &lt; 24 h; review signed off by owners</span></td><td>Phase 2<span class="meta">30-90 days</span></td><td>R04<span class="meta">Controls C04, C05</span></td><td class="num">$8,000<span class="meta">$0 / yr</span></td></tr><tr><td class="id">RM10</td><td><span class="risk-title">Update IR plan with privacy-breach playbook (RROSH test, OPC and CAI notification); run a tabletop</span><span class="meta"><b>Owner:</b> Security Manager | <b>Due:</b> 2027-01-29 | <b>Success measure:</b> Plan approved; tabletop held with exec team</span></td><td>Phase 2<span class="meta">30-90 days</span></td><td>R13, R09<span class="meta">Controls C12</span></td><td class="num">$10,000<span class="meta">$0 / yr</span></td></tr><tr><td class="id">RM11</td><td><span class="risk-title">Bring remaining laptops into MDM, EDR and encryption; block non-compliant devices in Okta</span><span class="meta"><b>Owner:</b> IT Manager | <b>Due:</b> 2027-01-15 | <b>Success measure:</b> 100% coverage; device trust enforced</span></td><td>Phase 2<span class="meta">30-90 days</span></td><td>R15, R16<span class="meta">Controls C07</span></td><td class="num">$6,000<span class="meta">$4,000 / yr</span></td></tr><tr><td class="id">RM12</td><td><span class="risk-title">Roll out phishing-resistant MFA (FIDO2 keys / Okta FastPass) starting with admins and engineers</span><span class="meta"><b>Owner:</b> IT Manager | <b>Due:</b> 2027-04-16 | <b>Success measure:</b> 100% admins on FIDO2; 80% staff on FastPass</span></td><td>Phase 3<span class="meta">90-180 days</span></td><td>R03, R01<span class="meta">Controls C01, C06</span></td><td class="num">$25,000<span class="meta">$0 / yr</span></td></tr><tr><td class="id">RM13</td><td><span class="risk-title">Build the data inventory and retention schedule; purge churned-customer data older than retention</span><span class="meta"><b>Owner:</b> Security Manager | <b>Due:</b> 2027-04-30 | <b>Success measure:</b> Inventory covers all PII stores; purge logged</span></td><td>Phase 3<span class="meta">90-180 days</span></td><td>R12, R09<span class="meta">Controls C14</span></td><td class="num">$20,000<span class="meta">$0 / yr</span></td></tr><tr><td class="id">RM14</td><td><span class="risk-title">Complete PIAs for cross-border transfers to US subprocessors and for PineDesk</span><span class="meta"><b>Owner:</b> General Counsel | <b>Due:</b> 2027-04-30 | <b>Success measure:</b> PIAs signed off for all 12 PII vendors</span></td><td>Phase 3<span class="meta">90-180 days</span></td><td>R09<span class="meta">Controls C13</span></td><td class="num">$15,000<span class="meta">$0 / yr</span></td></tr><tr><td class="id">RM15</td><td><span class="risk-title">Tier all 47 vendors; collect SOC 2 or questionnaires for the 12 critical ones; sign missing DPAs</span><span class="meta"><b>Owner:</b> Finance / Procurement | <b>Due:</b> 2027-04-30 | <b>Success measure:</b> 100% critical vendors assessed</span></td><td>Phase 3<span class="meta">90-180 days</span></td><td>R07<span class="meta">Controls C15</span></td><td class="num">$0<span class="meta">$15,000 / yr</span></td></tr><tr><td class="id">RM16</td><td><span class="risk-title">Approve DR plan with RTO/RPO; run first failover test to a second region</span><span class="meta"><b>Owner:</b> VP Engineering | <b>Due:</b> 2027-05-28 | <b>Success measure:</b> Test meets RTO 4 h / RPO 1 h</span></td><td>Phase 3<span class="meta">90-180 days</span></td><td>R06, R16<span class="meta">Controls C11</span></td><td class="num">$10,000<span class="meta">$24,000 / yr</span></td></tr><tr><td class="id">RM17</td><td><span class="risk-title">Replace static CI keys with GitHub OIDC roles; add SAST to pull requests</span><span class="meta"><b>Owner:</b> VP Engineering | <b>Due:</b> 2027-03-31 | <b>Success measure:</b> 0 static AWS keys in CI</span></td><td>Phase 3<span class="meta">90-180 days</span></td><td>R11<span class="meta">Controls C16, C01</span></td><td class="num">$0<span class="meta">$0 / yr</span></td></tr><tr><td class="id">RM18</td><td><span class="risk-title">Write runbooks for the 8 missing procedures; set up an on-call rotation with MDR</span><span class="meta"><b>Owner:</b> Security Manager | <b>Due:</b> 2027-04-30 | <b>Success measure:</b> 12 of 12 runbooks; on-call live</span></td><td>Phase 3<span class="meta">90-180 days</span></td><td>R14, R05<span class="meta">Controls C18</span></td><td class="num">$0<span class="meta">$0 / yr</span></td></tr><tr><td class="id">RM19</td><td><span class="risk-title">Publish the 5 missing policies; leadership approval of the full set</span><span class="meta"><b>Owner:</b> Security Manager | <b>Due:</b> 2027-07-30 | <b>Success measure:</b> 11 of 11 policies approved</span></td><td>Phase 4<span class="meta">180-365 days</span></td><td>R14<span class="meta">Controls C19</span></td><td class="num">$0<span class="meta">$0 / yr</span></td></tr><tr><td class="id">RM20</td><td><span class="risk-title">Deploy DLP alerts for bulk Salesforce and production exports</span><span class="meta"><b>Owner:</b> Security Manager | <b>Due:</b> 2027-09-30 | <b>Success measure:</b> Alerts on exports &gt; 1,000 records</span></td><td>Phase 4<span class="meta">180-365 days</span></td><td>R10<span class="meta">Controls C17</span></td><td class="num">$10,000<span class="meta">$30,000 / yr</span></td></tr><tr><td class="id">RM21</td><td><span class="risk-title">Run quarterly phishing simulations and role-based training for engineers and admins</span><span class="meta"><b>Owner:</b> IT/Security Analyst | <b>Due:</b> 2027-10-29 | <b>Success measure:</b> Click rate &lt; 5%; completion &gt; 95%</span></td><td>Phase 4<span class="meta">180-365 days</span></td><td>R03<span class="meta">Controls C06</span></td><td class="num">$0<span class="meta">$8,000 / yr</span></td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="project-actions">
+          <button class="btn btn-primary js-toggle" aria-expanded="true" aria-controls="part4-details">Hide Details <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+          <a class="btn btn-outline" href="files/Sandymichodrian_Risk_Register.xlsx"><svg aria-hidden="true"><use href="#i-download"/></svg>Download Workbook (Excel)</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- ===== PART 5 ===== -->
+    <article id="part5" class="card project" aria-labelledby="part5-h">
+      <div class="project-head">
+        <span class="eyebrow">Step 10</span>
+        <h3 id="part5-h">Management Presentation</h3>
+        <p class="sub">Findings for the executive team, with the bottom line first</p>
+        <div class="tags"><span class="tag">PowerPoint, 12 slides</span><span class="tag">Speaker notes</span></div>
+      </div>
+      <div class="project-body">
+        <div class="impact"><svg aria-hidden="true"><use href="#i-target"/></svg><div><span class="label">Impact</span><p>Wrote a 12-slide executive deck where every slide title states its conclusion, so a busy reader gets the message from the titles alone. It closes by asking leadership for three clear decisions.</p></div></div>
+        <div class="block" style="margin-top:0">
+          <h4>Slide by slide</h4>
+          <ol class="slides"><li><span class="sn">2</span><span class="st">Executive summary<span class="ss">Risk is High today; most of it can be cut in 6 months for the stated budget.</span></span></li><li><span class="sn">3</span><span class="st">Scope and approach<span class="ss">14 assets, 19 evidence requests, NIST CSF 2.0, 5 x 5 scoring.</span></span></li><li><span class="sn">4</span><span class="st">What we protect<span class="ss">Five critical assets hold or control access to customer PII.</span></span></li><li><span class="sn">5</span><span class="st">Risk heat map<span class="ss">Every Critical and High risk moves into the Medium or Low zone.</span></span></li><li><span class="sn">6</span><span class="st">Top five risks<span class="ss">AWS admin credentials, privacy law, phishing, monitoring, patching.</span></span></li><li><span class="sn">7</span><span class="st">CSF 2.0 maturity<span class="ss">Detect, Respond and Recover are the weakest functions.</span></span></li><li><span class="sn">8</span><span class="st">Evidence and gaps<span class="ss">10 High gaps confirmed; only encryption fully met its target.</span></span></li><li><span class="sn">9</span><span class="st">Roadmap<span class="ss">Four phases: quick wins first, then detection and recovery.</span></span></li><li><span class="sn">10</span><span class="st">Investment<span class="ss">About $136K one-off and $228K a year; MDR is the largest line.</span></span></li><li><span class="sn">11</span><span class="st">Decisions<span class="ss">Approve the budget, designate a Privacy Officer, back the 30-day quick wins.</span></span></li></ol>
+        </div>
+        <div class="block">
+          <h4>The three decisions requested</h4>
+          <div class="decisions">
+            <div class="decision"><div class="dn">Decision 1</div><h4>Approve the budget</h4><p>$136,000 one-off and $228,000 a year, mainly for 24x7 MDR, phishing-resistant MFA and disaster-recovery testing.</p></div>
+            <div class="decision"><div class="dn">Decision 2</div><h4>Designate a Privacy Officer</h4><p>Recommend the General Counsel. Under Québec Law 25 the CEO is the person in charge by default, and the title and contact details must be published.</p></div>
+            <div class="decision"><div class="dn">Decision 3</div><h4>Back the 30-day quick wins</h4><p>Ask Engineering and IT to prioritize Phase 1 so the Critical risk is resolved by mid-November, with a monthly risk report to leadership.</p></div>
+          </div>
+        </div>
+        <div class="project-actions">
+          <a class="btn btn-primary" href="files/Sandymichodrian_Management_Findings.pptx"><svg aria-hidden="true"><use href="#i-download"/></svg>Download Presentation (PowerPoint)</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ 6. LESSONS ============ -->
+<section id="lessons" class="bg-white" aria-labelledby="lessons-h">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Reflection</span>
+      <h2 id="lessons-h">What I learned</h2>
+    </div>
+    <ul class="takeaways">
+      <li><svg aria-hidden="true"><use href="#i-check"/></svg><p><b>Evidence changes the picture.</b> Several controls looked fine on paper, but the evidence showed gaps, such as 11 active accounts for people who had left.</p></li>
+      <li><svg aria-hidden="true"><use href="#i-check"/></svg><p><b>Privacy law shapes security priorities.</b> PIPEDA and Québec Law 25 turn missing records and assessments into regulatory risk, not only good practice.</p></li>
+      <li><svg aria-hidden="true"><use href="#i-check"/></svg><p><b>Small teams need leverage.</b> With only 3 security staff, automation and an MDR partner reduce more risk than adding more manual tasks.</p></li>
+      <li><svg aria-hidden="true"><use href="#i-check"/></svg><p><b>Quick wins build momentum.</b> Phase 1 removes the only Critical risk at almost no cost, which helps win support for the larger investments.</p></li>
+      <li><svg aria-hidden="true"><use href="#i-check"/></svg><p><b>Lead with the answer.</b> Management needs the bottom line, the cost and the decision required, with the detail available in the register.</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7. TOOLS & FRAMEWORKS ============ -->
+<section id="tools" class="bg-soft" aria-labelledby="tools-h">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Tools &amp; frameworks</span>
+      <h2 id="tools-h">What the work is built on</h2>
+    </div>
+    <div class="tf-grid">
+      <div class="card tf-col">
+        <h3>Frameworks and laws</h3>
+        <p>The standards and legal duties the assessment maps to.</p>
+        <div class="tf-item"><span class="ti"><svg aria-hidden="true"><use href="#i-layers"/></svg></span><div><h4>NIST CSF 2.0</h4><p>Govern, Identify, Protect, Detect, Respond, Recover. Used to tag every risk and control, and to report maturity by function.</p></div></div>
+        <div class="tf-item"><span class="ti"><svg aria-hidden="true"><use href="#i-shield"/></svg></span><div><h4>CIS Controls v8</h4><p>Safeguard references for each of the 19 controls.</p></div></div>
+        <div class="tf-item"><span class="ti"><svg aria-hidden="true"><use href="#i-scale"/></svg></span><div><h4>PIPEDA</h4><p>Canada's federal privacy law: accountability for vendors, breach records kept for 24 months, limits on retention.</p></div></div>
+        <div class="tf-item"><span class="ti"><svg aria-hidden="true"><use href="#i-key"/></svg></span><div><h4>Québec Law 25</h4><p>Person in charge of personal information, privacy impact assessments and breach notification to the CAI.</p></div></div>
+      </div>
+      <div class="card tf-col">
+        <h3>Tools</h3>
+        <p>How the deliverables are produced.</p>
+        <div class="tf-item"><span class="ti"><svg aria-hidden="true"><use href="#i-sheet"/></svg></span><div><h4>Microsoft Excel</h4><p>9-tab risk register workbook with live Likelihood x Impact formulas and heat maps.</p></div></div>
+        <div class="tf-item"><span class="ti"><svg aria-hidden="true"><use href="#i-present"/></svg></span><div><h4>Microsoft PowerPoint</h4><p>12-slide management presentation with speaker notes.</p></div></div>
+        <div class="tf-item"><span class="ti"><svg aria-hidden="true"><use href="#i-doc"/></svg></span><div><h4>PDF report</h4><p>29-page portfolio write-up of the method, results and lessons learned.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. CONTACT ============ -->
+<section id="contact" class="bg-navy" aria-labelledby="contact-h">
+  <div class="container">
+    <div class="contact-wrap">
+      <div>
+        <span class="open-badge"><i aria-hidden="true"></i>Open to GRC Analyst roles in Calgary / Remote</span>
+        <h2 id="contact-h">Let's talk about your risk program</h2>
+        <p class="lead">If your team needs someone to assess risk, test controls against evidence and brief leadership in plain terms, I'd be glad to talk.</p>
+        <a class="btn btn-ghost" href="https://bseun3785-glitch.github.io/grc-portfolio/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-arrow-left"/></svg>See my other GRC projects</a>
+      </div>
+      <div class="contact-list">
+        <a class="contact-item" href="mailto:bseun3785@gmail.com"><span class="ci"><svg aria-hidden="true"><use href="#i-mail"/></svg></span><div><small>Email</small><span>bseun3785@gmail.com</span></div></a>
+        <a class="contact-item" href="tel:+18255617046"><span class="ci"><svg aria-hidden="true"><use href="#i-phone"/></svg></span><div><small>Phone</small><span>825-561-7046</span></div></a>
+        <div class="contact-item"><span class="ci"><svg aria-hidden="true"><use href="#i-pin"/></svg></span><div><small>Location</small><span>Calgary, AB</span></div></div>
+        <a class="contact-item" href="https://www.linkedin.com/in/oluwaseun-bakare-62097796/" target="_blank" rel="noopener"><span class="ci"><svg aria-hidden="true"><use href="#i-linkedin"/></svg></span><div><small>LinkedIn</small><span>linkedin.com/in/oluwaseun-bakare-62097796</span></div></a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container">
+    <span>&copy; 2026 Seun Bakare | GRC Analyst | Calgary, AB</span>
+    <span>Sandymichodrian Software Inc. is a fictional company. No real company's data is used.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('menu-btn'),links=document.getElementById('nav-links');
+  btn.addEventListener('click',function(){var o=links.classList.toggle('open');btn.setAttribute('aria-expanded',o);});
+  links.addEventListener('click',function(e){if(e.target.tagName==='A'){links.classList.remove('open');btn.setAttribute('aria-expanded','false');}});
+
+  document.querySelectorAll('.js-toggle').forEach(function(b){
+    b.addEventListener('click',function(){
+      var panel=document.getElementById(b.getAttribute('aria-controls'));
+      var open=panel.hidden;
+      panel.hidden=!open;
+      b.setAttribute('aria-expanded',open);
+      b.firstChild.nodeValue=open?'Hide Details ':'View Details ';
+    });
+  });
+
+  var level='all',csf='all',rows=document.querySelectorAll('#register tbody tr');
+  var countEl=document.getElementById('result-count'),empty=document.getElementById('register-empty');
+  function apply(){
+    var n=0;
+    rows.forEach(function(r){
+      var ok=(level==='all'||r.dataset.level===level)&&(csf==='all'||r.dataset.csf===csf);
+      r.hidden=!ok; if(ok)n++;
+    });
+    countEl.textContent='Showing '+n+' of '+rows.length+' risks';
+    empty.hidden=n>0;
+  }
+  document.querySelectorAll('#level-filter .chip').forEach(function(c){
+    c.addEventListener('click',function(){
+      document.querySelectorAll('#level-filter .chip').forEach(function(x){x.setAttribute('aria-pressed','false');});
+      c.setAttribute('aria-pressed','true'); level=c.dataset.level; apply();
+    });
+  });
+  document.getElementById('csf-filter').addEventListener('change',function(e){csf=e.target.value;apply();});
+})();
+</script>
+
+</body>
+</html>
