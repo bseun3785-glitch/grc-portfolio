@@ -160,7 +160,7 @@ tbody tr:nth-child(even) td{background:var(--soft)}
 .stat.is-high .n{color:var(--blue)}
 .stat.is-total{grid-column:span 2}
 @media(min-width:768px){.stat.is-total{grid-column:auto}}
-.bg-white .stat,.summary .stat{background:var(--white)}
+.summary .stat:not(.is-critical){background:var(--white)}
 .summary-list{list-style:none;margin:32px 0 0;padding:0;display:grid;gap:12px}
 .summary-list li{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding:20px 22px;border-radius:var(--radius);background:var(--white);border:1px solid var(--line)}
 .summary-list .k{font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);min-width:150px;padding-top:2px}
@@ -385,6 +385,45 @@ a.contact-item:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,
 footer{background:var(--navy);border-top:1px solid rgba(255,255,255,.08);padding-block:28px;color:rgba(255,255,255,.72);font-size:16px}
 footer .container{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media print{
+  @page{size:Letter landscape;margin:10mm 12mm}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{font-size:19px}
+  .eyebrow,.section-head{break-after:avoid}
+  .section-head{break-inside:avoid;margin-bottom:28px}
+  .eyebrow{display:block}
+  section#skills,section#lessons,section#summary,section#about{padding-top:0}
+  body::before,.nav,.project-actions,.filters,.project-nav,.btn-row,.hero::after{display:none!important}
+  [hidden].details{display:block!important}
+  section{padding-block:28px}
+  .hero{padding-block:36px}
+  .container{max-width:none;padding-left:0;padding-right:0}
+  .card,.table-wrap{box-shadow:none}
+  .data table,.overview-table table{min-width:0}
+  .table-wrap{overflow:visible}
+  table{font-size:17px}
+  th{font-size:15px;padding:10px 12px}
+  td{padding:10px 12px}
+  tr,.stat,.finding,.step,.skill,.level-card,.timeline li,.slides li,.decision,.summary-list li,.takeaways li,.tf-item,.heatmap,.chart,.critical-box,.impact,.contact-item{break-inside:avoid}
+  .project,#about,#summary,#skills,#assessment,#lessons{break-before:page}
+  #assessment .project:first-of-type{break-before:auto}
+  thead{display:table-header-group}
+  h2,h3,h4{break-after:avoid}
+  .skill:hover{transform:none}
+  .about-grid{grid-template-columns:1.1fr 1fr;gap:48px}
+  .steps{grid-template-columns:repeat(5,1fr)}
+  .grid-4,.findings,.levels{grid-template-columns:repeat(4,1fr)}
+  .stats{grid-template-columns:repeat(5,1fr)}
+  .stat.is-total{grid-column:auto}
+  .ev-stats{grid-template-columns:repeat(4,1fr)}
+  .two-col{grid-template-columns:1.1fr 1fr}
+  .two-col.even,.tf-grid,.slides{grid-template-columns:1fr 1fr}
+  .decisions{grid-template-columns:repeat(3,1fr)}
+  .critical-box .cb-body{grid-template-columns:repeat(4,1fr)}
+  .contact-wrap{grid-template-columns:1.1fr 1fr}
+  .project-head,.project-body{padding:28px 36px}
+  .hero-note{margin-top:28px}
+}
 [hidden]{display:none!important}</style>
 </head>
 <body>
